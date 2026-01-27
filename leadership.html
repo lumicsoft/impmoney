@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadership | Earn BNB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style1.css">
+    <style>
+        /* BNB Logo Styling to match your premium theme */
+        .bnb-icon { width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 4px; filter: drop-shadow(0 0 2px rgba(243, 186, 47, 0.4)); }
+        .bnb-icon-sm { width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 2px; }
+    </style>
+</head>
+<body class="bg-[#050505] text-white">
+
+    <main class="max-w-7xl mx-auto px-6 relative z-10 pt-10 pb-20">
+        
+        <div class="mb-8">
+            <h1 class="text-3xl font-black orbitron italic uppercase tracking-tighter">Leadership <span class="text-yellow-500">Overview</span></h1>
+            <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Your leadership performance and earnings</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="premium-border p-6 flex items-center justify-between">
+                <div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase">Current Rank</p>
+                    <h2 id="rank-display" class="text-2xl font-black orbitron text-white">NONE (-)</h2>
+                    <p id="rank-bonus-display" class="text-green-400 font-bold text-[10px] mt-1 italic">0% Leadership ROI</p>
+                </div>
+                <i data-lucide="shield-check" class="w-12 h-12 text-green-400 opacity-50"></i>
+            </div>
+            <div class="premium-border p-6 flex items-center justify-between border-yellow-500/50">
+                <div>
+                    <p class="text-[10px] font-black text-yellow-500 uppercase">Next Rank</p>
+                    <h2 id="next-rank-display" class="text-2xl font-black orbitron text-white italic">INVITER</h2>
+                </div>
+                <i data-lucide="award" class="w-12 h-12 text-yellow-500"></i>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="premium-border p-5 text-center flex flex-col items-center justify-center">
+                <i data-lucide="wallet" class="w-8 h-8 text-green-400 mb-2"></i>
+                <p class="text-[8px] font-bold text-gray-400 uppercase">Available Reward</p>
+                <h3 class="text-lg font-black orbitron flex items-center">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon">
+                    <span id="rank-reward-available">0.000</span>
+                </h3>
+            </div>
+            <div class="premium-border p-5 text-center flex flex-col items-center justify-center">
+                <i data-lucide="coins" class="w-8 h-8 text-yellow-500 mb-2"></i>
+                <p class="text-[8px] font-bold text-gray-400 uppercase">Total Earned</p>
+                <h3 class="text-lg font-black orbitron flex items-center">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon">
+                    <span id="total-rank-earned">0.000</span>
+                </h3>
+            </div>
+            <div class="premium-border p-5 text-center flex flex-col items-center justify-center">
+                <i data-lucide="bar-chart-3" class="w-8 h-8 text-emerald-400 mb-2"></i>
+                <p class="text-[8px] font-bold text-gray-400 uppercase">Total Team Volume</p>
+                <h3 class="text-lg font-black orbitron flex items-center">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon">
+                    <span id="team-total-deposit">0.000</span>
+                </h3>
+            </div>
+            <div class="premium-border p-5 text-center flex flex-col items-center justify-center">
+                <i data-lucide="activity" class="w-8 h-8 text-green-500 mb-2"></i>
+                <p class="text-[8px] font-bold text-gray-400 uppercase">Team Active Volume</p>
+                <h3 class="text-lg font-black orbitron flex items-center">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon">
+                    <span id="team-active-deposit">0.000</span>
+                </h3>
+            </div>
+        </div>
+
+        <div class="premium-border p-6 md:p-8 mb-8">
+            <div class="flex items-center gap-3 mb-6">
+                <i data-lucide="trending-up" class="w-6 h-6 text-yellow-500"></i>
+                <h3 class="text-xl font-black orbitron uppercase italic">Progress to <span id="progress-next-rank" class="text-yellow-500">INVITER</span></h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-3">
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase">Team Count</p>
+                            <p class="text-lg font-black orbitron"><span id="current-team-count">0</span> <span id="target-team-count" class="text-xs text-gray-500 italic">/ 50</span></p>
+                        </div>
+                        <p id="team-count-percent" class="text-yellow-500 font-black orbitron">0%</p>
+                    </div>
+                    <div class="progress-container h-2 bg-white/5 rounded-full overflow-hidden">
+                        <div id="team-count-bar" class="progress-bar h-full bg-yellow-500 transition-all duration-1000" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase">Active Team Volume</p>
+                            <p class="text-lg font-black orbitron flex items-center">
+                                <span id="current-team-volume">0</span> 
+                                <span class="mx-2 text-gray-500">/</span>
+                                <span id="target-team-volume" class="text-xs text-gray-500 italic">2.500 BNB</span>
+                            </p>
+                        </div>
+                        <p id="team-volume-percent" class="text-yellow-500 font-black orbitron">0%</p>
+                    </div>
+                    <div class="progress-container h-2 bg-white/5 rounded-full overflow-hidden">
+                        <div id="team-volume-bar" class="progress-bar h-full bg-yellow-500 transition-all duration-1000" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="premium-border p-6 md:p-8 mb-8">
+            <h3 class="text-xl font-black orbitron uppercase italic mb-6"><span class="text-yellow-500">Direct</span> Downlines</h3>
+            <div class="overflow-x-auto">
+                <table class="luxury-table w-full text-left">
+                    <thead>
+                        <tr class="text-[10px] uppercase text-gray-500 border-b border-white/10">
+                            <th class="p-4">Username</th><th>Rank</th><th>Total Deposit</th><th>Active Deposit</th><th>Team Count</th><th>Differential %</th><th>Team Volume</th>
+                        </tr>
+                    </thead>
+                    <tbody id="direct-downline-body" class="text-gray-300 text-xs font-mono">
+                        <tr>
+                            <td colspan="7" class="p-8 text-center text-gray-500 italic">Connect wallet to view downlines</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="premium-border p-6 md:p-8 mb-8">
+            <h3 class="text-xl font-black orbitron uppercase italic mb-6"><span class="text-yellow-500">Leadership</span> Ranks</h3>
+            <div class="overflow-x-auto">
+                <table class="luxury-table w-full text-left">
+                    <thead>
+                        <tr class="text-[10px] uppercase text-gray-500 border-b border-white/10">
+                            <th class="p-4">Rank</th><th>ROI %</th><th>Team Count</th><th>Team Business</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-300 text-xs font-mono">
+                        <tr class="border-b border-white/5"><td class="p-4">V1</td><td class="text-yellow-500 font-bold">1.00%</td><td>50</td><td><img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon-sm"> 2.83 BNB</td></tr>
+                        <tr class="border-b border-white/5"><td class="p-4">V2</td><td class="text-yellow-500 font-bold">2.00%</td><td>100</td><td><img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon-sm"> 5.66 BNB</td></tr>
+                        <tr class="border-b border-white/5"><td class="p-4">V3</td><td class="text-yellow-500 font-bold">3.00%</td><td>200</td><td><img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon-sm"> 11.33 BNB</td></tr>
+                        <tr class="border-b border-white/5"><td class="p-4">V4</td><td class="text-yellow-500 font-bold">4.00%</td><td>400</td><td><img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon-sm"> 16.99 BNB</td></tr>
+                        <tr class="border-b border-white/5"><td class="p-4">V5</td><td class="text-yellow-500 font-bold">6.00%</td><td>800</td><td><img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon-sm"> 28.32 BNB</td></tr>
+                        <tr class="border-b border-white/5"><td class="p-4">V6</td><td class="text-yellow-500 font-bold">8.00%</td><td>1500</td><td><img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon-sm"> 56.64 BNB</td></tr>
+                        <tr><td class="p-4">V7</td><td class="text-yellow-500 font-bold">10.00%</td><td>2500</td><td><img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon-sm"> 113.29 BNB</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <script src="components.js"></script>
+    <script src="web3-handler.js"></script>
+    <script>
+        lucide.createIcons();
+        // Note: The logic for populating data should be in your web3-handler.js 
+        // or a similar script that interacts with your smart contract.
+    </script>
+</body>
+</html>

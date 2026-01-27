@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Earn BNB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style1.css">
+    <style>
+        .withdraw-btn { background: linear-gradient(135deg, #ff416c, #ff4b2b) !important; color: white !important; }
+        .capital-btn { background: linear-gradient(135deg, #00f2ff, #0066ff) !important; color: white !important; }
+        .animate-spin-slow { animation: spin 8s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .deposit-input-box { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 12px; width: 100%; color: white; outline: none; transition: 0.3s; }
+        .deposit-input-box:focus { border-color: #eab308; box-shadow: 0 0 15px rgba(234, 179, 8, 0.2); }
+        .bnb-logo-img { width: 20px; height: 20px; display: inline-block; vertical-align: middle; margin-right: 8px; filter: drop-shadow(0 0 2px rgba(243, 186, 47, 0.5)); }
+        .bnb-logo-large { width: 40px; height: 40px; display: inline-block; vertical-align: middle; margin-right: 12px; }
+        .luxury-table { width: 100%; border-collapse: collapse; }
+        .luxury-table th { padding: 15px; text-align: left; border-bottom: 2px solid rgba(234, 179, 8, 0.2); color: #eab308; font-size: 12px; font-family: 'Orbitron'; }
+        .luxury-table td { padding: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 14px; font-weight: 600; }
+    </style>
+</head>
+<body class="bg-[#050505] text-white"> 
+    <script>
+        const bnbIconHTML = `<img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-logo-img" alt="BNB">`;
+        const bnbIconLargeHTML = `<img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-logo-large" alt="BNB">`;
+    </script>
+
+    <main class="max-w-7xl mx-auto px-6 relative z-10 pt-10">
+        <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
+            <div class="premium-border p-4 text-center">
+                <p class="text-[9px] font-bold text-gray-400 uppercase">Total Deposits</p>
+                <h3 class="text-lg font-black orbitron flex items-center justify-center">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-logo-img">
+                    <span id="total-deposit-display">0.000</span>
+                </h3>
+            </div>
+            <div class="premium-border p-4 text-center">
+                <p class="text-[9px] font-bold text-gray-400 uppercase">Active Deposit</p>
+                <h3 class="text-lg font-black orbitron text-green-400 flex items-center justify-center">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-logo-img">
+                    <span id="active-deposit">0.000</span>
+                </h3>
+            </div>
+            <div class="premium-border p-4 text-center">
+                <p class="text-[9px] font-bold text-gray-400 uppercase">Total Earned</p>
+                <h3 class="text-lg font-black orbitron text-green-500 flex items-center justify-center">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-logo-img">
+                    <span id="total-earned">0.000</span>
+                </h3>
+            </div>
+            <div class="premium-border p-4 text-center">
+                <p class="text-[9px] font-bold text-gray-400 uppercase">Withdrawable</p>
+                <h3 class="text-lg font-black orbitron text-emerald-400 flex items-center justify-center">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-logo-img">
+                    <span id="withdrawable-display">0.000</span>
+                </h3>
+            </div>
+            <div class="premium-border p-4 text-center">
+                <p class="text-[9px] font-bold text-yellow-500 uppercase">Rank</p> 
+                <h3 id="rank-display" class="text-lg font-black orbitron text-yellow-500 uppercase">...</h3>
+            </div>
+            <div class="premium-border p-4 text-center">
+                <p class="text-[9px] font-bold text-red-400 uppercase">Total Withdrawal</p>
+                <h3 class="text-lg font-black orbitron text-red-400 flex items-center justify-center">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-logo-img">
+                    <span id="total-withdrawn">0.000</span>
+                </h3>
+            </div>
+        </div>
+
+        <div class="premium-border p-6 mb-8">
+            <p class="text-[10px] font-black orbitron text-yellow-500 uppercase mb-3">Referral Link</p>
+            <div class="flex items-center gap-3 bg-black/40 p-2 pl-4 rounded-xl border border-white/10">
+                <input id="refURL" type="text" readonly value="Connect wallet to see link..." class="bg-transparent border-none outline-none w-full text-xs text-gray-300 font-mono">
+                <button onclick="copyLink()" class="gold-btn !py-2">COPY</button>
+            </div>
+        </div>
+
+        <div class="premium-border p-6 mb-8 bg-yellow-500/5 border-yellow-500/20">
+            <div class="flex flex-col md:flex-row items-center gap-4">
+                <div class="w-full md:w-1/2">
+                    <p class="text-[10px] font-black orbitron text-yellow-500 uppercase mb-2 ml-1">Deposit Amount (BNB)</p>
+                    <input type="number" id="deposit-amount" placeholder="Min 0.001 BNB" class="deposit-input-box font-black orbitron text-lg">
+                </div>
+                <div class="w-full md:w-1/2 md:pt-6">
+                    <button onclick="handleDeposit()" id="deposit-btn" class="gold-btn w-full !py-4 orbitron font-black tracking-widest bg-gradient-to-r from-yellow-500 to-yellow-700">
+                        DEPOSIT NOW <i data-lucide="arrow-up-right" class="w-4 h-4 inline-block ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="premium-border p-8 mb-6 text-center bg-emerald-950/20">
+            <div class="relative z-10">
+                <i data-lucide="refresh-cw" class="w-8 h-8 text-yellow-500 mx-auto mb-2 animate-spin-slow"></i>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Compounding Balance</p>
+                <h3 class="text-4xl font-black orbitron text-white mb-8 flex items-center justify-center gap-2">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-logo-large">
+                    <span id="compounding-balance">0.000</span>
+                </h3>
+                <div class="flex flex-col md:flex-row justify-center gap-4 max-w-2xl mx-auto">
+                    <button onclick="handleClaim()" class="gold-btn withdraw-btn px-10 flex-1">
+                        <i data-lucide="arrow-down-to-line" class="w-4 h-4 inline-block mr-2"></i> Withdraw Now
+                    </button>
+                    <button onclick="handleCompoundDaily()" class="gold-btn px-10 flex-1">
+                        Compound Now <i data-lucide="zap" class="w-3 h-3 inline-block ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="premium-border p-8 mb-8 bg-blue-950/10 border-blue-500/30">
+            <div class="relative z-10">
+                <div class="flex justify-center mb-8">
+                    <button onclick="handleCapitalWithdraw()" class="gold-btn capital-btn px-12 py-4 text-sm tracking-widest">
+                        <i data-lucide="unlock" class="w-4 h-4 inline-block mr-2"></i> Capital Withdrawal
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-black/40 p-4 rounded-2xl border border-white/5 text-center">
+                        <p class="text-[9px] font-bold text-gray-400 uppercase mb-1">Total Investment</p>
+                        <h4 class="text-xl font-black orbitron text-white flex items-center justify-center">
+                            <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-logo-img">
+                            <span id="capital-investment-display">0.000</span>
+                        </h4>
+                    </div>
+                    <div class="bg-black/40 p-4 rounded-2xl border border-white/5 text-center">
+                        <p class="text-[9px] font-bold text-gray-400 uppercase mb-1">Total Withdrawn</p>
+                        <h4 class="text-xl font-black orbitron text-blue-400 flex items-center justify-center">
+                            <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-logo-img">
+                            <span id="capital-withdrawn-display">0.000</span>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="premium-border p-8 md:p-12 mb-8">
+            <div class="relative z-10">
+                <div class="flex justify-between items-center mb-10">
+                    <h2 class="text-xl font-black orbitron italic uppercase">Compound <span class="text-green-400">Power</span></h2>
+                    <span id="status-badge" class="px-4 py-1 rounded-full bg-red-500/20 text-red-500 text-[10px] font-black border border-red-500/30 uppercase animate-pulse">● Inactive Status</span>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-4 bg-black/50 rounded-[32px] p-10 border border-white/10 text-center">
+                        <div class="w-32 h-32 rounded-full border-8 border-yellow-500/10 flex items-center justify-center mb-4 mx-auto relative">
+                            <div class="absolute inset-0 animate-spin-slow border-t-4 border-yellow-400 rounded-full"></div>
+                            <span id="cp-display" class="text-5xl font-black orbitron text-yellow-500">0.000</span>
+                        </div>
+                        <p class="text-xs font-black text-gray-400 uppercase">Available CP</p>
+                    </div>
+                    <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="inner-plate p-8 bg-black/20 rounded-2xl border border-white/5">
+                            <p class="text-xs font-black text-yellow-500 uppercase mb-2">Daily Earnings <span id="daily-perc-display" class="text-white ml-2">5-6.00%</span></p>
+                            <h4 class="text-4xl font-black orbitron text-white flex items-center">
+                                <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-logo-large">
+                                <span id="projected-return">0.000</span>
+                            </h4>
+                            <p class="text-[10px] text-gray-400 uppercase mt-2">Projected 24h Return</p>
+                        </div>
+                        <div class="inner-plate p-8 bg-black/20 rounded-2xl border border-white/5">
+                            <p class="text-xs font-black text-yellow-500 uppercase mb-2">Next Settlement</p>
+                            <h4 id="next-timer" class="text-4xl font-black orbitron text-white">00:00:00</h4>
+                            <p class="text-[10px] text-green-400 uppercase mt-2 tracking-widest italic font-bold">Auto Distribution Enabled</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="premium-border mb-8">
+            <div class="relative z-10 p-6 md:p-8">
+                <h3 class="text-xl font-black orbitron mb-6 uppercase italic"><span class="text-yellow-500">Daily Returns</span> by CP Level</h3>
+                <div class="overflow-x-auto">
+                    <table class="luxury-table">
+                        <thead>
+                            <tr>
+                                <th>CP Value (BNB Equivalent)</th>
+                                <th>Daily Return</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cp-chart-body">
+                            <tr class="border-b border-white/5">
+                                <td>< 0.566 BNB</td>
+                                <td class="text-green-400 font-bold">5.00%</td>
+                            </tr>
+                            <tr class="border-b border-white/5">
+                                <td> 0.566 - 1.132 BNB</td>
+                                <td class="text-green-400 font-bold">5.25%</td>
+                            </tr>
+                            <tr class="bg-yellow-500/5 border-b border-white/5">
+                                <td> 1.133 - 2.831 BNB 🔥</td>
+                                <td class="text-yellow-500 font-bold">5.50%</td>
+                            </tr>
+                            <tr class="border-b border-white/5">
+                                <td>2.832 - 5.663 BNB</td>
+                                <td class="text-green-400 font-bold">5.75%</td>
+                            </tr>
+                            <tr class="bg-yellow-500/10">
+                                <td class="text-yellow-400 font-black text-lg">≥ 5.665 BNB 🔥</td>
+                                <td class="text-yellow-400 font-black text-lg">6.00%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <script src="components.js"></script>
+    <script src="web3-handler.js"></script>
+    <script>
+        lucide.createIcons();
+        
+        function updateROIDisplay(cpAmount) {
+            let perc = 5.00;
+            if(cpAmount >= 25) perc = 6.00;
+            else if(cpAmount >= 10) perc = 5.75;
+            else if(cpAmount >= 5) perc = 5.50;
+            else if(cpAmount >= 1) perc = 5.25;
+            
+            document.getElementById('daily-perc-display').innerText = `+${perc.toFixed(2)}%`;
+            return perc;
+        }
+
+        // Updated Copy Function (No restrictions)
+        function copyLink() {
+            const refInput = document.getElementById('refURL');
+            
+            // Link tabhi copy hoga jab wo 'Connect wallet' na ho
+            if (refInput.value === "Connect wallet to see link...") {
+                alert("Please connect your wallet first to generate your referral link.");
+                return;
+            }
+
+            // Text copy logic
+            refInput.select();
+            refInput.setSelectionRange(0, 99999); // Mobile ke liye
+            
+            try {
+                navigator.clipboard.writeText(refInput.value);
+                alert("Referral link copied successfully!");
+            } catch (err) {
+                // Fallback agar clipboard API kaam na kare
+                document.execCommand('copy');
+                alert("Referral link copied!");
+            }
+        }
+    </script>
+</body>
+</html>
