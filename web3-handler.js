@@ -1,9 +1,9 @@
 let provider, signer, contract;
 
 // --- CONFIGURATION ---
-const CONTRACT_ADDRESS = "0x34FF4680A9A659C0ef4edF7776648472101205a4"; 
-const USDT_TOKEN_ADDRESS = "0x55d398326f99059fF775485246999027B3197955"; // BSC USDT
-const TESTNET_CHAIN_ID = 56; 
+const CONTRACT_ADDRESS = "0xd0E977431dE3C9840e9bc9116B0E0254A8D88f9F"; 
+const USDT_TOKEN_ADDRESS = "0x3b66b1e08f55af26c8ea14a73da64b6bc8d799de"; // BSC USDT
+const TESTNET_CHAIN_ID = 97; 
 
 // --- RANK CONFIG (Star1 to Master King) ---
 const RANK_DETAILS = [
@@ -313,5 +313,6 @@ function updateNavbar(addr) {
     const btn = document.getElementById('connect-btn');
     if(btn) btn.innerText = addr.substring(0,6) + "..." + addr.substring(38);
 }
+
 
 window.addEventListener('load', init);
