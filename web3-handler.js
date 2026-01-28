@@ -89,7 +89,7 @@ window.handleDeposit = async function() {
         // Approve Check
         const allowance = await usdt.allowance(await signer.getAddress(), CONTRACT_ADDRESS);
         if (allowance.lt(amountInWei)) {
-            const txApp = await usdt.approve(CONTRACT_ADDRESS, ethers.constants.MaxUint256);
+           const txApp = await usdt.approve(CONTRACT_ADDRESS, amountInWei);
             await txApp.wait();
         }
 
@@ -377,6 +377,7 @@ function updateNavbar(addr) {
 }
 
 window.addEventListener('load', init);
+
 
 
 
