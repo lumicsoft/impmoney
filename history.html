@@ -3,57 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaction History | Earn BNB</title>
+    <title>Tx History | PRO MAX</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="style1.css">
     <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050505; }
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        
         .filter-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #888; padding: 10px 20px; border-radius: 12px;
-            font-size: 10px; font-weight: 800; text-transform: uppercase;
-            transition: all 0.3s;
-        }
-        .filter-btn.active {
-            background: #f59e0b;
-            color: black;
-            border-color: #f59e0b;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-        }
-        .history-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px; padding: 20px;
-            transition: all 0.3s;
+            color: #666; padding: 12px 24px; border-radius: 16px;
+            font-size: 11px; font-weight: 800; text-transform: uppercase;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 1px;
         }
-        .history-card:hover { border-color: rgba(255, 215, 0, 0.3); transform: translateY(-2px); }
-        /* BNB Logo Styling */
-        .bnb-icon-sm { width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px; filter: drop-shadow(0 0 2px rgba(243, 186, 47, 0.4)); }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: black;
+            border-color: transparent;
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Premium Card Style - Matches Index1 */
+        .history-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px; padding: 24px;
+            position: relative; overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .history-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top right, rgba(245, 158, 11, 0.05), transparent);
+            pointer-events: none;
+        }
+
+        .history-card:hover {
+            border-color: rgba(245, 158, 11, 0.3);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #f59e0b, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
-<body class="bg-black text-white">
+<body class="text-white">
 
-    <main class="max-w-7xl mx-auto px-6 relative z-10 pt-10">
+    <main class="max-w-4xl mx-auto px-6 relative z-10 pt-28 pb-32">
         
-        <div class="mb-10 text-center">
-            <h1 class="text-3xl font-black orbitron italic uppercase tracking-tighter">Transaction <span class="text-yellow-500">History</span></h1>
-            <p class="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em]">Detailed records of your financial activities</p>
+        <div class="mb-12 text-center">
+            <h1 class="text-4xl font-black orbitron italic uppercase tracking-tighter">
+                TX <span class="text-gradient">HISTORY</span>
+            </h1>
+            <div class="h-1 w-20 bg-yellow-500 mx-auto mt-2 rounded-full"></div>
+            <p class="text-gray-500 text-[10px] font-bold uppercase tracking-[0.3em] mt-4">Blockchain Verified Records</p>
         </div>
 
-        <div class="premium-border p-4 mb-8">
-            <div class="flex flex-wrap justify-center gap-2 md:gap-4">
-                <button onclick="showHistory('deposit')" id="btn-deposit" class="filter-btn active">Deposit</button>
-                <button onclick="showHistory('compounding')" id="btn-compounding" class="filter-btn">Compounding</button>
-                <button onclick="showHistory('income')" id="btn-income" class="filter-btn">Income</button>
-                <button onclick="showHistory('withdrawal')" id="btn-withdrawal" class="filter-btn">Withdrawals</button>
-            </div>
+        <div class="flex flex-wrap justify-center gap-3 mb-12">
+            <button onclick="showHistory('deposit')" id="btn-deposit" class="filter-btn active">Deposits</button>
+            <button onclick="showHistory('compounding')" id="btn-compounding" class="filter-btn">Reinvest Capital</button>
+            <button onclick="showHistory('income')" id="btn-income" class="filter-btn">Income</button>
+            <button onclick="showHistory('withdrawal')" id="btn-withdrawal" class="filter-btn">Withdrawals</button>
         </div>
 
-        <div id="history-container" class="space-y-4 pb-20">
-            <div class="text-center py-20 text-gray-500 orbitron animate-pulse text-xs uppercase tracking-widest">
-                Connecting to Smart Contract...
+        <div id="history-container" class="grid gap-4">
+            <div class="text-center py-24 opacity-50">
+                <div class="w-12 h-12 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p class="orbitron text-[10px] tracking-widest uppercase">Syncing with Contract...</p>
             </div>
         </div>
 
@@ -64,71 +89,64 @@
     <script src="web3-handler.js"></script>
     
     <script>
-        lucide.createIcons();
-
         async function showHistory(type) {
             const container = document.getElementById('history-container');
             const buttons = document.querySelectorAll('.filter-btn');
             
-            // UI Update: Button Active State
+            // UI Update
             buttons.forEach(btn => btn.classList.remove('active'));
-            const activeBtn = document.getElementById('btn-' + type);
-            if(activeBtn) activeBtn.classList.add('active');
+            document.getElementById('btn-' + type).classList.add('active');
 
-            // Show Loading State
             container.innerHTML = `
-                <div class="text-center py-20">
-                    <div class="inline-block animate-spin mb-4 text-yellow-500">
-                        <i data-lucide="refresh-cw" class="w-8 h-8"></i>
+                <div class="text-center py-24">
+                    <div class="inline-block animate-bounce mb-4 text-yellow-500">
+                        <i data-lucide="database" class="w-8 h-8"></i>
                     </div>
-                    <p class="text-[10px] font-bold text-gray-500 orbitron uppercase tracking-widest">Fetching Data from Contract...</p>
+                    <p class="text-[10px] font-bold text-gray-500 orbitron uppercase tracking-widest">Accessing Ledger...</p>
                 </div>
             `;
             lucide.createIcons();
 
             try {
-                // Calling the optimized function from web3-handler.js
+                // IMPORTANT: In your web3-handler.js, ensure fetchBlockchainHistory filters by type
                 const logs = await window.fetchBlockchainHistory(type);
 
                 if(!logs || logs.length === 0) {
                     container.innerHTML = `
-                        <div class="text-center py-20 border border-dashed border-white/10 rounded-3xl">
-                            <i data-lucide="database-zap" class="w-10 h-10 text-gray-700 mx-auto mb-3"></i>
-                            <p class="text-gray-500 text-[10px] font-bold orbitron uppercase tracking-widest">No ${type} records found</p>
+                        <div class="py-20 text-center border border-white/5 rounded-[32px] bg-white/[0.02]">
+                            <i data-lucide="search-x" class="w-12 h-12 text-gray-800 mx-auto mb-4"></i>
+                            <p class="text-gray-600 text-[10px] font-bold orbitron uppercase tracking-widest">No ${type === 'compounding' ? 'Reinvest' : type} data found</p>
                         </div>
                     `;
                     lucide.createIcons();
                     return;
                 }
 
-                // Render Logs
                 let html = '';
                 logs.forEach(item => {
-                    const statusColor = item.color || 'text-cyan-400';
-                    const isPositive = type === 'deposit' || type === 'income' || type === 'compounding';
+                    const isPositive = type !== 'withdrawal';
+                    const displayType = type === 'compounding' ? 'REINVEST CAPITAL' : item.type;
 
                     html += `
                     <div class="history-card">
                         <div class="flex justify-between items-center">
-                            <div>
-                                <p class="text-[10px] font-black ${statusColor} uppercase tracking-tighter">${item.type}</p>
-                                <p class="text-[10px] font-bold text-gray-500 uppercase mt-1">${item.date} | ${item.time}</p>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
+                                    <i data-lucide="${getIcon(type)}" class="w-5 h-5 ${isPositive ? 'text-yellow-500' : 'text-red-500'}"></i>
+                                </div>
+                                <div>
+                                    <p class="text-[11px] font-black orbitron text-white uppercase tracking-tight">${displayType}</p>
+                                    <p class="text-[9px] font-bold text-gray-500 uppercase mt-1 tracking-wider">${item.date} • ${item.time}</p>
+                                </div>
                             </div>
                             <div class="text-right">
-                                <h3 class="text-lg font-black orbitron ${isPositive ? 'text-green-400' : 'text-red-400'} flex items-center justify-end">
-                                    <span class="mr-1">${isPositive ? '+' : '-'}</span>
-                                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon-sm">
+                                <div class="text-lg font-black orbitron ${isPositive ? 'text-yellow-500' : 'text-red-500'} flex items-center justify-end">
+                                    <span class="text-sm mr-1 font-bold">$</span>
                                     ${item.amount}
-                                </h3>
-                                <p class="text-[8px] text-gray-500 font-bold uppercase italic">TX COMPLETED</p>
+                                </div>
+                                <p class="text-[8px] text-gray-600 font-bold uppercase tracking-widest mt-1">Status: Success</p>
                             </div>
                         </div>
-                        ${item.extra && item.extra !== "" ? `
-                            <div class="mt-3 pt-2 border-t border-white/5 flex justify-between items-center">
-                                <span class="text-[9px] text-yellow-500/70 font-bold uppercase tracking-wider italic">${item.extra}</span>
-                                <span class="text-[9px] bg-white/5 px-2 py-0.5 rounded text-gray-400">VERIFIED</span>
-                            </div>
-                        ` : ''}
                     </div>`;
                 });
 
@@ -136,22 +154,20 @@
                 lucide.createIcons();
 
             } catch (err) {
-                console.error("History Page UI Error:", err);
-                container.innerHTML = `
-                    <div class="text-center py-20 text-red-500 orbitron text-xs font-bold">
-                        <i data-lucide="alert-triangle" class="w-10 h-10 mx-auto mb-2"></i>
-                        <p>SYNC ERROR: PLEASE REFRESH</p>
-                    </div>
-                `;
-                lucide.createIcons();
+                container.innerHTML = `<div class="text-center text-red-500 text-[10px] orbitron py-20 uppercase">Network Timeout - Try Again</div>`;
             }
         }
 
-        // Auto-load history when page opens
+        function getIcon(type) {
+            if(type === 'deposit') return 'arrow-down-left';
+            if(type === 'compounding') return 'refresh-cw';
+            if(type === 'income') return 'trending-up';
+            return 'external-link';
+        }
+
         window.addEventListener('load', () => {
             const checkInit = setInterval(() => {
-                // Ensure signer and contract are ready from web3-handler.js
-                if (window.signer && window.contract) {
+                if (window.contract) {
                     showHistory('deposit');
                     clearInterval(checkInit);
                 }
