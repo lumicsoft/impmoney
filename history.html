@@ -8,10 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050505; color: white; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050505; color: white; overflow-x: hidden; }
         .orbitron { font-family: 'Orbitron', sans-serif; }
 
-        /* --- DASHBOARD ANIMATION LOGIC --- */
+        /* Moving Neon Border Animation */
         @keyframes slowRotate {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -19,14 +19,13 @@
 
         .history-card {
             position: relative;
-            background: #0a0a0a;
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 24px;
-            padding: 2px; /* Border thickness */
+            padding: 1.5px; /* Border gap */
             overflow: hidden;
             transition: all 0.5s ease;
         }
 
-        /* Yeh hai woh moving color jo rotate karega */
         .history-card::before {
             content: '';
             position: absolute;
@@ -34,24 +33,17 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(
-                transparent, 
-                transparent, 
-                transparent, 
-                #f59e0b /* Yellow Glow */
-            );
-            animation: slowRotate 4s linear infinite;
+            background: conic-gradient(transparent, transparent, transparent, #f59e0b);
+            animation: slowRotate 5s linear infinite;
             z-index: 0;
         }
 
-        /* Inner Content jo moving border ke upar rahega */
         .history-inner {
             position: relative;
             background: #0d0d0d;
-            border-radius: 22px;
+            border-radius: 23px;
             padding: 20px;
             z-index: 1;
-            height: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -68,7 +60,7 @@
         .filter-btn.active {
             background: #f59e0b;
             color: black;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
         }
 
         .text-gradient {
@@ -80,15 +72,15 @@
 </head>
 <body class="pt-28 pb-32">
 
-    <main class="max-w-4xl mx-auto px-6">
+    <main class="max-w-4xl mx-auto px-6 relative z-10">
         <div class="mb-12 text-center">
             <h1 class="text-4xl font-black orbitron italic uppercase tracking-tighter">
                 TX <span class="text-gradient">HISTORY</span>
             </h1>
-            <p class="text-gray-500 text-[10px] font-bold uppercase tracking-[0.3em] mt-4 italic">Live Blockchain Ledger</p>
+            <p class="text-gray-500 text-[10px] font-bold uppercase tracking-[0.3em] mt-2">Verified Blockchain Ledger</p>
         </div>
 
-        <div class="flex flex-wrap justify-center gap-3 mb-12 relative z-50">
+        <div class="flex flex-wrap justify-center gap-3 mb-12">
             <button onclick="showHistory('deposit')" id="btn-deposit" class="filter-btn active">Deposits</button>
             <button onclick="showHistory('compounding')" id="btn-compounding" class="filter-btn">Reinvest Capital</button>
             <button onclick="showHistory('income')" id="btn-income" class="filter-btn">Income</button>
@@ -96,66 +88,105 @@
         </div>
 
         <div id="history-container" class="grid gap-6">
+            <div class="text-center py-20 opacity-50">
+                <div class="w-10 h-10 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p class="orbitron text-[10px] tracking-widest uppercase">Connecting Web3...</p>
             </div>
+        </div>
     </main>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <script src="components.js"></script>
+    <script src="web3-handler.js"></script>
+    
     <script>
         async function showHistory(type) {
             const container = document.getElementById('history-container');
             const buttons = document.querySelectorAll('.filter-btn');
             
+            // 1. Update Buttons UI
             buttons.forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-' + type).classList.add('active');
+            const activeBtn = document.getElementById('btn-' + type);
+            if(activeBtn) activeBtn.classList.add('active');
 
-            // Virtual data for display (Asli data web3-handler se aayega)
-            container.innerHTML = `<div class="text-center py-20 orbitron animate-pulse text-xs text-gray-500">FETCHING...</div>`;
+            // 2. Show Animated Loading
+            container.innerHTML = `
+                <div class="text-center py-20">
+                    <div class="inline-block animate-spin text-yellow-500 mb-4">
+                        <i data-lucide="loader-2" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-[10px] font-bold text-gray-500 orbitron tracking-widest uppercase">Fetching ${type} Logs...</p>
+                </div>
+            `;
+            lucide.createIcons();
 
             try {
-                const logs = await window.fetchBlockchainHistory(type);
+                // 3. ACTUAL WEB3 CALL (Using your web3-handler.js)
+                if (!window.fetchBlockchainHistory) {
+                    throw new Error("Web3 Handler not loaded yet");
+                }
                 
+                const logs = await window.fetchBlockchainHistory(type);
+
                 if(!logs || logs.length === 0) {
-                    container.innerHTML = `<div class="text-center py-10 text-gray-600 uppercase text-[10px] orbitron border border-dashed border-white/10 rounded-3xl">No Data Found</div>`;
+                    container.innerHTML = `
+                        <div class="text-center py-20 border border-dashed border-white/5 rounded-[40px]">
+                            <p class="text-gray-600 text-[10px] font-bold orbitron uppercase tracking-widest">No ${type} records found</p>
+                        </div>
+                    `;
                     return;
                 }
 
+                // 4. Render Logs with NEON Cards
                 let html = '';
                 logs.forEach(item => {
-                    const isPositive = type !== 'withdrawal';
+                    const isPositive = (type !== 'withdrawal');
+                    const label = (type === 'compounding') ? 'REINVESTED' : type.toUpperCase();
+
                     html += `
                     <div class="history-card">
                         <div class="history-inner">
                             <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                                <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 shadow-inner">
                                     <i data-lucide="${getIcon(type)}" class="w-5 h-5 ${isPositive ? 'text-yellow-500' : 'text-red-500'}"></i>
                                 </div>
                                 <div>
-                                    <p class="text-[11px] font-black orbitron text-white uppercase">${type === 'compounding' ? 'REINVESTED' : type}</p>
-                                    <p class="text-[9px] font-bold text-gray-500 mt-1 tracking-widest">${item.date}</p>
+                                    <p class="text-[11px] font-black orbitron text-white tracking-tighter">${label}</p>
+                                    <p class="text-[9px] font-bold text-gray-500 mt-1 uppercase">${item.date} | ${item.time}</p>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <div class="text-lg font-black orbitron ${isPositive ? 'text-yellow-500' : 'text-red-400'}">
-                                    <span class="text-sm">$</span>${item.amount}
+                                <div class="text-xl font-black orbitron ${isPositive ? 'text-yellow-500' : 'text-red-500'}">
+                                    <span class="text-sm font-bold mr-0.5">$</span>${item.amount}
                                 </div>
-                                <p class="text-[8px] text-gray-600 font-bold tracking-widest uppercase">Verified</p>
+                                <p class="text-[8px] text-gray-600 font-bold uppercase tracking-[0.2em] mt-1">Confirmed</p>
                             </div>
                         </div>
                     </div>`;
                 });
+
                 container.innerHTML = html;
                 lucide.createIcons();
-            } catch (e) { console.log(e); }
+
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = `<div class="text-center py-20 text-red-500 orbitron text-[10px]">SYNC ERROR: CHECK CONNECTION</div>`;
+            }
         }
 
         function getIcon(type) {
-            const icons = { 'deposit': 'arrow-down-left', 'compounding': 'refresh-cw', 'income': 'trending-up', 'withdrawal': 'external-link' };
-            return icons[type] || 'circle';
+            const map = { 'deposit': 'arrow-down-left', 'compounding': 'refresh-cw', 'income': 'trending-up', 'withdrawal': 'external-link' };
+            return map[type] || 'circle';
         }
 
-        // Initial Load
+        // Wait for Web3 Initialization
         window.addEventListener('load', () => {
-            setTimeout(() => { if(window.contract) showHistory('deposit'); }, 1000);
+            const checkInit = setInterval(() => {
+                if (window.contract && window.fetchBlockchainHistory) {
+                    showHistory('deposit');
+                    clearInterval(checkInit);
+                }
+            }, 500);
         });
     </script>
 </body>
