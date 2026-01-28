@@ -14,7 +14,6 @@
             --soft-purple: #6a4c93;
             --panel-bg: #080810;
         }
-
         body {
             background: #050505;
             background-image: radial-gradient(circle at 50% 50%, #111122 0%, #050505 100%);
@@ -22,7 +21,6 @@
             color: white;
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
-
         .premium-card {
             position: relative;
             background: rgba(255, 255, 255, 0.05);
@@ -30,7 +28,6 @@
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.4);
         }
-
         .premium-card::before {
             content: '';
             position: absolute;
@@ -41,7 +38,6 @@
             filter: blur(8px);
             z-index: 1;
         }
-
         .inner-content {
             position: relative;
             margin: 2.5px;
@@ -51,18 +47,14 @@
             z-index: 2;
             height: calc(100% - 5px);
         }
-
         @keyframes slowRotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-
         .orbitron { font-family: 'Orbitron', sans-serif; }
-        
         .stat-box { display: flex; align-items: center; justify-content: space-between; width: 100%; }
         .label-text { font-size: 10px; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
         .amount-text { font-size: 20px; font-weight: 800; color: #ffffff !important; text-align: right; }
-
         .btn-gold-pro {
             background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
             color: black !important;
@@ -72,13 +64,11 @@
             border: 1px solid rgba(255,255,255,0.3);
         }
         .btn-gold-pro:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(184, 134, 11, 0.6); }
-
         .btn-outline-pro {
             border: 1px solid rgba(255, 255, 255, 0.2);
             background: rgba(255, 255, 255, 0.05);
             color: white; font-weight: 600; transition: all 0.3s ease;
         }
-
         .deposit-input-field {
             background: #000000 !important;
             border: 1px solid rgba(184, 134, 11, 0.3);
@@ -86,17 +76,14 @@
             font-family: 'Orbitron', sans-serif; box-shadow: inset 0 2px 10px rgba(0,0,0,0.8);
             width: 100%; text-align: left;
         }
-
         .info-row {
             display: flex; align-items: center; justify-content: space-between;
             padding: 10px 14px; background: rgba(255,255,255,0.03);
             border-radius: 10px; margin-bottom: 6px; border: 1px solid rgba(255,255,255,0.05);
         }
-
         .luxury-table { width: 100%; border-collapse: collapse; }
         .luxury-table th { padding: 15px; text-align: left; border-bottom: 2px solid rgba(184, 134, 11, 0.2); color: #FFD700; font-size: 11px; font-family: 'Orbitron'; }
         .luxury-table td { padding: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 14px; }
-
         .animate-spin-slow { animation: slowRotate 8s linear infinite; }
     </style>
 </head>
@@ -114,7 +101,7 @@
                         </div>
                         <div class="info-row">
                             <div class="flex items-center gap-3"><i data-lucide="wallet" class="text-yellow-600 w-4 h-4"></i><span class="label-text">Address:</span></div>
-                            <span id="connect-btn" class="text-xs font-mono text-blue-300 truncate">0x71...892</span>
+                            <span id="user-address" class="text-xs font-mono text-blue-300 truncate">0x71...892</span>
                         </div>
                         <div class="info-row">
                             <div class="flex items-center gap-3"><i data-lucide="crown" class="text-yellow-600 w-4 h-4"></i><span class="label-text">Current Rank:</span></div>
@@ -189,16 +176,16 @@
             <div class="inner-content !block py-10 px-6">
                 <div class="flex justify-between items-center mb-10">
                     <h2 class="text-xl font-black orbitron italic uppercase">Compound <span class="text-yellow-500">Power</span></h2>
-                    <span id="status-badge" class="px-4 py-1 rounded-full bg-red-500/20 text-red-500 text-[10px] font-black border border-red-500/30 uppercase animate-pulse">● Inactive Status</span>
+                    <span id="status-badge" class="px-4 py-1 rounded-full bg-yellow-500/20 text-yellow-500 text-[10px] font-black border border-yellow-500/30 uppercase animate-pulse">● Checking Status...</span>
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                     <div class="lg:col-span-4 bg-black/50 rounded-[32px] p-10 border border-white/10 text-center relative overflow-hidden">
                         <div class="w-32 h-32 rounded-full border-8 border-yellow-500/10 flex items-center justify-center mb-4 mx-auto relative">
                             <div class="absolute inset-0 animate-spin-slow border-t-4 border-yellow-500 rounded-full"></div>
-                            <span id="cp-display" class="text-4xl font-black orbitron text-white">0.00</span>
+                            <span id="active-deposit-cp" class="text-4xl font-black orbitron text-white">0.00</span>
                         </div>
-                        <p class="text-xs font-black text-gray-400 uppercase tracking-widest">Available CP</p>
+                        <p class="text-xs font-black text-gray-400 uppercase tracking-widest">Active Deposit</p>
                     </div>
 
                     <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -219,7 +206,7 @@
 
         <div class="premium-card">
             <div class="inner-content !block py-8 text-center">
-                <p class="label-text tracking-[8px] mb-3 opacity-60">Working Balance</p>
+                <p class="label-text tracking-[8px] mb-3 opacity-60">Withdrawable Balance</p>
                 <h3 class="text-4xl font-black orbitron text-white mb-8">$<span id="compounding-balance">0.00</span></h3>
                 <div class="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
                     <button onclick="handleClaim()" class="btn-gold-pro px-12 py-4 rounded-xl orbitron text-xs flex-1 uppercase">Withdraw Profit</button>
@@ -275,8 +262,17 @@
             navigator.clipboard.writeText(refInput.value);
             alert("Referral Link Copied!");
         }
-        
-        // Note: handleDeposit, handleClaim are now handled by web3-handler.js
+
+        // Dashboard sync ke liye extra logic agar zarurat pade
+        window.addEventListener('load', () => {
+             // Inactive badge update fix
+             const statusBadge = document.getElementById('status-badge');
+             const activeDep = parseFloat(document.getElementById('active-deposit').innerText);
+             if(activeDep > 0) {
+                statusBadge.innerHTML = "● Active Status";
+                statusBadge.className = "px-4 py-1 rounded-full bg-green-500/20 text-green-500 text-[10px] font-black border border-green-500/30 uppercase";
+             }
+        });
     </script>
 </body>
 </html>
