@@ -7,46 +7,68 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="style1.css">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050505; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050505; color: white; }
         .orbitron { font-family: 'Orbitron', sans-serif; }
-        
+
+        /* --- DASHBOARD ANIMATION LOGIC --- */
+        @keyframes slowRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .history-card {
+            position: relative;
+            background: #0a0a0a;
+            border-radius: 24px;
+            padding: 2px; /* Border thickness */
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        /* Yeh hai woh moving color jo rotate karega */
+        .history-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent, 
+                transparent, 
+                transparent, 
+                #f59e0b /* Yellow Glow */
+            );
+            animation: slowRotate 4s linear infinite;
+            z-index: 0;
+        }
+
+        /* Inner Content jo moving border ke upar rahega */
+        .history-inner {
+            position: relative;
+            background: #0d0d0d;
+            border-radius: 22px;
+            padding: 20px;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .filter-btn {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: #666; padding: 12px 24px; border-radius: 16px;
             font-size: 11px; font-weight: 800; text-transform: uppercase;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            letter-spacing: 1px;
+            transition: all 0.4s ease;
         }
         
         .filter-btn.active {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: #f59e0b;
             color: black;
-            border-color: transparent;
-            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2);
-            transform: translateY(-2px);
-        }
-
-        /* Premium Card Style - Matches Index1 */
-        .history-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px; padding: 24px;
-            position: relative; overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .history-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at top right, rgba(245, 158, 11, 0.05), transparent);
-            pointer-events: none;
-        }
-
-        .history-card:hover {
-            border-color: rgba(245, 158, 11, 0.3);
-            background: rgba(255, 255, 255, 0.07);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
         }
 
         .text-gradient {
@@ -56,122 +78,84 @@
         }
     </style>
 </head>
-<body class="text-white">
+<body class="pt-28 pb-32">
 
-    <main class="max-w-4xl mx-auto px-6 relative z-10 pt-28 pb-32">
-        
+    <main class="max-w-4xl mx-auto px-6">
         <div class="mb-12 text-center">
             <h1 class="text-4xl font-black orbitron italic uppercase tracking-tighter">
                 TX <span class="text-gradient">HISTORY</span>
             </h1>
-            <div class="h-1 w-20 bg-yellow-500 mx-auto mt-2 rounded-full"></div>
-            <p class="text-gray-500 text-[10px] font-bold uppercase tracking-[0.3em] mt-4">Blockchain Verified Records</p>
+            <p class="text-gray-500 text-[10px] font-bold uppercase tracking-[0.3em] mt-4 italic">Live Blockchain Ledger</p>
         </div>
 
-        <div class="flex flex-wrap justify-center gap-3 mb-12">
+        <div class="flex flex-wrap justify-center gap-3 mb-12 relative z-50">
             <button onclick="showHistory('deposit')" id="btn-deposit" class="filter-btn active">Deposits</button>
             <button onclick="showHistory('compounding')" id="btn-compounding" class="filter-btn">Reinvest Capital</button>
             <button onclick="showHistory('income')" id="btn-income" class="filter-btn">Income</button>
             <button onclick="showHistory('withdrawal')" id="btn-withdrawal" class="filter-btn">Withdrawals</button>
         </div>
 
-        <div id="history-container" class="grid gap-4">
-            <div class="text-center py-24 opacity-50">
-                <div class="w-12 h-12 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                <p class="orbitron text-[10px] tracking-widest uppercase">Syncing with Contract...</p>
+        <div id="history-container" class="grid gap-6">
             </div>
-        </div>
-
     </main>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <script src="components.js"></script>
-    <script src="web3-handler.js"></script>
-    
     <script>
         async function showHistory(type) {
             const container = document.getElementById('history-container');
             const buttons = document.querySelectorAll('.filter-btn');
             
-            // UI Update
             buttons.forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-' + type).classList.add('active');
 
-            container.innerHTML = `
-                <div class="text-center py-24">
-                    <div class="inline-block animate-bounce mb-4 text-yellow-500">
-                        <i data-lucide="database" class="w-8 h-8"></i>
-                    </div>
-                    <p class="text-[10px] font-bold text-gray-500 orbitron uppercase tracking-widest">Accessing Ledger...</p>
-                </div>
-            `;
-            lucide.createIcons();
+            // Virtual data for display (Asli data web3-handler se aayega)
+            container.innerHTML = `<div class="text-center py-20 orbitron animate-pulse text-xs text-gray-500">FETCHING...</div>`;
 
             try {
-                // IMPORTANT: In your web3-handler.js, ensure fetchBlockchainHistory filters by type
                 const logs = await window.fetchBlockchainHistory(type);
-
+                
                 if(!logs || logs.length === 0) {
-                    container.innerHTML = `
-                        <div class="py-20 text-center border border-white/5 rounded-[32px] bg-white/[0.02]">
-                            <i data-lucide="search-x" class="w-12 h-12 text-gray-800 mx-auto mb-4"></i>
-                            <p class="text-gray-600 text-[10px] font-bold orbitron uppercase tracking-widest">No ${type === 'compounding' ? 'Reinvest' : type} data found</p>
-                        </div>
-                    `;
-                    lucide.createIcons();
+                    container.innerHTML = `<div class="text-center py-10 text-gray-600 uppercase text-[10px] orbitron border border-dashed border-white/10 rounded-3xl">No Data Found</div>`;
                     return;
                 }
 
                 let html = '';
                 logs.forEach(item => {
                     const isPositive = type !== 'withdrawal';
-                    const displayType = type === 'compounding' ? 'REINVEST CAPITAL' : item.type;
-
                     html += `
                     <div class="history-card">
-                        <div class="flex justify-between items-center">
+                        <div class="history-inner">
                             <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
+                                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
                                     <i data-lucide="${getIcon(type)}" class="w-5 h-5 ${isPositive ? 'text-yellow-500' : 'text-red-500'}"></i>
                                 </div>
                                 <div>
-                                    <p class="text-[11px] font-black orbitron text-white uppercase tracking-tight">${displayType}</p>
-                                    <p class="text-[9px] font-bold text-gray-500 uppercase mt-1 tracking-wider">${item.date} • ${item.time}</p>
+                                    <p class="text-[11px] font-black orbitron text-white uppercase">${type === 'compounding' ? 'REINVESTED' : type}</p>
+                                    <p class="text-[9px] font-bold text-gray-500 mt-1 tracking-widest">${item.date}</p>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <div class="text-lg font-black orbitron ${isPositive ? 'text-yellow-500' : 'text-red-500'} flex items-center justify-end">
-                                    <span class="text-sm mr-1 font-bold">$</span>
-                                    ${item.amount}
+                                <div class="text-lg font-black orbitron ${isPositive ? 'text-yellow-500' : 'text-red-400'}">
+                                    <span class="text-sm">$</span>${item.amount}
                                 </div>
-                                <p class="text-[8px] text-gray-600 font-bold uppercase tracking-widest mt-1">Status: Success</p>
+                                <p class="text-[8px] text-gray-600 font-bold tracking-widest uppercase">Verified</p>
                             </div>
                         </div>
                     </div>`;
                 });
-
                 container.innerHTML = html;
                 lucide.createIcons();
-
-            } catch (err) {
-                container.innerHTML = `<div class="text-center text-red-500 text-[10px] orbitron py-20 uppercase">Network Timeout - Try Again</div>`;
-            }
+            } catch (e) { console.log(e); }
         }
 
         function getIcon(type) {
-            if(type === 'deposit') return 'arrow-down-left';
-            if(type === 'compounding') return 'refresh-cw';
-            if(type === 'income') return 'trending-up';
-            return 'external-link';
+            const icons = { 'deposit': 'arrow-down-left', 'compounding': 'refresh-cw', 'income': 'trending-up', 'withdrawal': 'external-link' };
+            return icons[type] || 'circle';
         }
 
+        // Initial Load
         window.addEventListener('load', () => {
-            const checkInit = setInterval(() => {
-                if (window.contract) {
-                    showHistory('deposit');
-                    clearInterval(checkInit);
-                }
-            }, 500);
+            setTimeout(() => { if(window.contract) showHistory('deposit'); }, 1000);
         });
     </script>
 </body>
