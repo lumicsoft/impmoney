@@ -93,6 +93,10 @@
             border-radius: 10px; margin-bottom: 6px; border: 1px solid rgba(255,255,255,0.05);
         }
 
+        .luxury-table { width: 100%; border-collapse: collapse; }
+        .luxury-table th { padding: 15px; text-align: left; border-bottom: 2px solid rgba(184, 134, 11, 0.2); color: #FFD700; font-size: 11px; font-family: 'Orbitron'; }
+        .luxury-table td { padding: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 14px; }
+
         .animate-spin-slow { animation: slowRotate 8s linear infinite; }
     </style>
 </head>
@@ -105,22 +109,22 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <div class="info-row">
-                            <div class="flex items-center gap-3"><i data-lucide="user" class="text-yellow-600 w-4 h-4"></i><span class="label-text">User:</span></div>
-                            <span id="username-display" class="text-sm font-bold text-white uppercase tracking-wider">Syncing...</span>
+                            <div class="flex items-center gap-3"><i data-lucide="user" class="text-yellow-600 w-4 h-4"></i><span class="label-text">User Name:</span></div>
+                            <span id="username-display" class="text-sm font-bold uppercase">USER_ALPHA</span>
                         </div>
                         <div class="info-row">
-                            <div class="flex items-center gap-3"><i data-lucide="wallet" class="text-yellow-600 w-4 h-4"></i><span class="label-text">Wallet:</span></div>
-                            <span id="connect-btn" class="text-xs font-mono text-blue-300 truncate">Connect Wallet</span>
+                            <div class="flex items-center gap-3"><i data-lucide="wallet" class="text-yellow-600 w-4 h-4"></i><span class="label-text">Address:</span></div>
+                            <span id="connect-btn" class="text-xs font-mono text-blue-300 truncate">0x71...892</span>
                         </div>
                         <div class="info-row">
-                            <div class="flex items-center gap-3"><i data-lucide="crown" class="text-yellow-600 w-4 h-4"></i><span class="label-text">Rank:</span></div>
-                            <span id="rank-display" class="orbitron font-black text-yellow-600 text-xs">...</span>
+                            <div class="flex items-center gap-3"><i data-lucide="crown" class="text-yellow-600 w-4 h-4"></i><span class="label-text">Current Rank:</span></div>
+                            <span id="rank-display" class="orbitron font-black text-yellow-600 text-xs">PREMIUM</span>
                         </div>
                     </div>
                     <div class="flex flex-col justify-center bg-black/40 p-5 rounded-2xl border border-white/5">
                         <p class="label-text text-center mb-3">Invitation Link</p>
                         <div class="flex items-center bg-black border border-white/10 rounded-xl p-1.5 pl-4">
-                            <input id="refURL" type="text" readonly value="..." class="bg-transparent border-none outline-none w-full text-xs font-mono text-gray-400">
+                            <input id="refURL" type="text" readonly value="https://usdt.com/ref/ALPHA" class="bg-transparent border-none outline-none w-full text-xs font-mono text-gray-400">
                             <button onclick="copyLink()" class="btn-gold-pro px-6 py-2 rounded-lg text-[10px]">Copy</button>
                         </div>
                     </div>
@@ -140,7 +144,7 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-3 w-full md:w-auto">
-                    <input type="number" id="deposit-amount" placeholder="Min 10 USDT" class="deposit-input-field md:w-48">
+                    <input type="number" id="deposit-amount" placeholder="Enter Amount" class="deposit-input-field md:w-48">
                     <button id="deposit-btn" onclick="handleDeposit()" class="btn-gold-pro px-8 py-3 rounded-xl text-xs orbitron whitespace-nowrap">Deposit Now</button>
                 </div>
             </div>
@@ -148,7 +152,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <div class="premium-card"><div class="inner-content stat-box">
-                <div class="flex items-center gap-3"><i data-lucide="database" class="text-yellow-600 w-6 h-6"></i><p class="label-text">Total Deposits</p></div>
+                <div class="flex items-center gap-3"><i data-lucide="database" class="text-yellow-600 w-6 h-6"></i><p class="label-text">Deposits</p></div>
                 <h3 class="amount-text orbitron">$<span id="total-deposit">0.00</span></h3>
             </div></div>
             <div class="premium-card"><div class="inner-content stat-box">
@@ -156,12 +160,28 @@
                 <h3 class="amount-text orbitron">$<span id="active-deposit">0.00</span></h3>
             </div></div>
             <div class="premium-card"><div class="inner-content stat-box">
-                <div class="flex items-center gap-3"><i data-lucide="users" class="text-blue-600 w-6 h-6"></i><p class="label-text">Level Earnings</p></div>
+                <div class="flex items-center gap-3"><i data-lucide="users" class="text-blue-600 w-6 h-6"></i><p class="label-text">Level</p></div>
                 <h3 class="amount-text orbitron">$<span id="level-earning">0.00</span></h3>
             </div></div>
             <div class="premium-card"><div class="inner-content stat-box">
-                <div class="flex items-center gap-3"><i data-lucide="medal" class="text-purple-600 w-6 h-6"></i><p class="label-text">Rank Earnings</p></div>
+                <div class="flex items-center gap-3"><i data-lucide="medal" class="text-purple-600 w-6 h-6"></i><p class="label-text">Rank</p></div>
                 <h3 class="amount-text orbitron">$<span id="rank-earning">0.00</span></h3>
+            </div></div>
+            <div class="premium-card"><div class="inner-content stat-box">
+                <div class="flex items-center gap-3"><i data-lucide="trending-up" class="text-emerald-600 w-6 h-6"></i><p class="label-text">Total Earned</p></div>
+                <h3 class="amount-text orbitron">$<span id="total-earned">0.00</span></h3>
+            </div></div>
+            <div class="premium-card"><div class="inner-content stat-box">
+                <div class="flex items-center gap-3"><i data-lucide="wallet" class="text-sky-500 w-6 h-6"></i><p class="label-text">Withdraw</p></div>
+                <h3 class="amount-text orbitron">$<span id="withdrawable">0.00</span></h3>
+            </div></div>
+            <div class="premium-card"><div class="inner-content stat-box">
+                <div class="flex items-center gap-3"><i data-lucide="external-link" class="text-red-600 w-6 h-6"></i><p class="label-text">Paid Out</p></div>
+                <h3 class="amount-text orbitron">$<span id="total-withdrawn">0.00</span></h3>
+            </div></div>
+            <div class="premium-card"><div class="inner-content stat-box">
+                <div class="flex items-center gap-3"><i data-lucide="shield-check" class="text-yellow-600 w-6 h-6"></i><p class="label-text">Status</p></div>
+                <h3 id="main-status-text" class="text-xs font-black orbitron text-yellow-500">ACTIVE</h3>
             </div></div>
         </div>
 
@@ -171,6 +191,7 @@
                     <h2 class="text-xl font-black orbitron italic uppercase">Compound <span class="text-yellow-500">Power</span></h2>
                     <span id="status-badge" class="px-4 py-1 rounded-full bg-red-500/20 text-red-500 text-[10px] font-black border border-red-500/30 uppercase animate-pulse">● Inactive Status</span>
                 </div>
+                
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                     <div class="lg:col-span-4 bg-black/50 rounded-[32px] p-10 border border-white/10 text-center relative overflow-hidden">
                         <div class="w-32 h-32 rounded-full border-8 border-yellow-500/10 flex items-center justify-center mb-4 mx-auto relative">
@@ -179,9 +200,10 @@
                         </div>
                         <p class="text-xs font-black text-gray-400 uppercase tracking-widest">Available CP</p>
                     </div>
+
                     <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="p-8 bg-white/5 rounded-2xl border border-white/10">
-                            <p class="text-xs font-black text-yellow-500 uppercase mb-2">Daily Return (0.7%)</p>
+                            <p class="text-xs font-black text-yellow-500 uppercase mb-2">Daily Earnings <span id="daily-perc-display" class="text-white ml-2">5-6.00%</span></p>
                             <h4 class="text-4xl font-black orbitron text-white">$<span id="projected-return">0.00</span></h4>
                             <p class="text-[10px] text-gray-400 uppercase mt-2">Projected 24h Return</p>
                         </div>
@@ -197,11 +219,33 @@
 
         <div class="premium-card">
             <div class="inner-content !block py-8 text-center">
-                <p class="label-text tracking-[8px] mb-3 opacity-60">Withdrawable Balance</p>
-                <h3 class="text-4xl font-black orbitron text-white mb-8">$<span id="withdrawable">0.00</span></h3>
+                <p class="label-text tracking-[8px] mb-3 opacity-60">Working Balance</p>
+                <h3 class="text-4xl font-black orbitron text-white mb-8">$<span id="compounding-balance">0.00</span></h3>
                 <div class="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
-                    <button onclick="handleClaim()" class="btn-gold-pro px-12 py-4 rounded-xl orbitron text-xs flex-1">WITHDRAW NOW</button>
-                    <button onclick="handleCompoundDaily()" class="btn-outline-pro px-12 py-4 rounded-xl orbitron text-xs flex-1">REINVEST PROFIT <i data-lucide="zap" class="w-3 h-3 inline-block ml-1"></i></button>
+                    <button onclick="handleClaim()" class="btn-gold-pro px-12 py-4 rounded-xl orbitron text-xs flex-1 uppercase">Withdraw Profit</button>
+                    <button onclick="handleCompoundDaily()" class="btn-outline-pro px-12 py-4 rounded-xl orbitron text-xs flex-1 uppercase">Compound Now <i data-lucide="zap" class="w-3 h-3 inline-block ml-1"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="premium-card">
+            <div class="inner-content !block">
+                <h3 class="text-sm font-black orbitron mb-6 uppercase italic text-yellow-500 tracking-widest">Daily Returns by CP Level</h3>
+                <div class="overflow-x-auto">
+                    <table class="luxury-table">
+                        <thead>
+                            <tr>
+                                <th>CP VALUE (USDT Equivalent)</th>
+                                <th>DAILY RETURN</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cp-chart-body">
+                            <tr><td>< 500 USDT</td><td class="text-green-400 font-bold">5.00%</td></tr>
+                            <tr class="bg-white/5"><td>500 - 1000 USDT</td><td class="text-green-400 font-bold">5.25%</td></tr>
+                            <tr><td class="text-yellow-500 font-bold">1001 - 3000 USDT 🔥</td><td class="text-yellow-500 font-bold">5.50%</td></tr>
+                            <tr class="bg-yellow-500/10"><td class="text-yellow-400 font-black">≥ 5000 USDT 🔥</td><td class="text-yellow-400 font-black">6.00%</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -209,11 +253,12 @@
         <div class="premium-card">
             <div class="inner-content flex flex-col md:flex-row items-center justify-between gap-6 py-10 px-8">
                 <div class="text-center md:text-left">
-                    <p class="label-text mb-2">Capital Balance</p>
+                    <p class="label-text mb-2">Available Capital</p>
                     <h3 class="text-4xl font-black orbitron text-yellow-600">$<span id="cap-balance">0.00</span></h3>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-                    <button onclick="handleCapitalWithdraw()" class="btn-outline-pro px-10 py-4 rounded-xl text-xs orbitron border-red-500/30 text-red-400 hover:bg-red-500/10">WITHDRAW CAPITAL</button>
+                    <button onclick="handleCapitalWithdraw()" class="btn-outline-pro px-10 py-4 rounded-xl text-xs orbitron border-red-500/30 text-red-400 hover:bg-red-500/10 uppercase">Withdraw Capital</button>
+                    <button onclick="handleDeposit()" class="btn-gold-pro px-10 py-4 rounded-xl text-xs orbitron uppercase">Reinvest Capital</button>
                 </div>
             </div>
         </div>
@@ -222,16 +267,16 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <script src="components.js"></script>
- <script src="web3-handler.js"></script>
+    <script src="web3-handler.js"></script>
     <script>
         lucide.createIcons();
         function copyLink() {
             const refInput = document.getElementById('refURL');
-            if (!refInput || refInput.value === "...") return alert("Please connect wallet first!");
             navigator.clipboard.writeText(refInput.value);
             alert("Referral Link Copied!");
         }
+        
+        // Note: handleDeposit, handleClaim are now handled by web3-handler.js
     </script>
 </body>
 </html>
-
