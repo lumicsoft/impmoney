@@ -250,8 +250,13 @@ window.fetchBlockchainHistory = async function(type) {
 async function fetchAllData(address) {
     try {
         const [user, extra, live] = await Promise.all([
-            contract.users(address), contract.usersExtra(address), contract.getLiveBalance(address)
+            contract.users(address), 
+            contract.usersExtra(address), 
+            contract.getLiveBalance(address)
         ]);
+
+        // Dashboard Stats
+        updateText('total-deposit', format(user.totalDeposited)); // grid box ID
         updateText('total-deposit-display', format(user.totalDeposited));
         updateText('active-deposit', format(user.totalActiveDeposit));
         updateText('total-earned', format(user.totalEarnings));
@@ -259,20 +264,33 @@ async function fetchAllData(address) {
         updateText('team-count', extra.teamCount.toString());
         updateText('direct-count', extra.directsCount.toString());
         
+        // Income Calculations
         const pendingROI = parseFloat(format(live));
         const reserveDaily = parseFloat(format(extra.reserveDailyROI));
         const networkIncome = parseFloat(format(extra.rewardsReferral)) + parseFloat(format(extra.rewardsRank));
 
-        updateText('compounding-balance', (pendingROI + reserveDaily).toFixed(4));
+        // Compound Power & Balance Section
+        const currentCP = (pendingROI + reserveDaily).toFixed(4);
+        updateText('cp-display', currentCP); // Circle display ID
+        updateText('compounding-balance', currentCP);
         updateText('ref-balance-display', networkIncome.toFixed(4));
-        updateText('withdrawable-display', (pendingROI + reserveDaily + networkIncome).toFixed(4));
+        updateText('level-earning', format(extra.rewardsReferral)); // new box ID
+        updateText('rank-earning', format(extra.rewardsRank)); // new box ID
         
+        // Withdraw Section
+        const totalWithdrawable = (pendingROI + reserveDaily + networkIncome).toFixed(4);
+        updateText('withdrawable', totalWithdrawable); 
+        updateText('withdrawable-display', totalWithdrawable);
+        
+        // Projected Return
         const activeAmt = parseFloat(format(user.totalActiveDeposit));
         updateText('projected-return', (activeAmt * 0.007).toFixed(4));
         
+        // Rank
         const rankName = await contract.getRankName(extra.rank);
         updateText('rank-display', rankName);
 
+        // Referral URL
         const baseUrl = window.location.href.split('index1.html')[0] + "register.html";
         if(document.getElementById('refURL')) document.getElementById('refURL').value = `${baseUrl}?ref=${user.username}`;
     } catch (err) { console.error(err); }
@@ -284,8 +302,8 @@ async function fetchLeadershipData(address) {
         const rIdx = extra.rank;
         updateText('rank-display', RANK_DETAILS[rIdx].name);
         updateText('team-active-deposit', format(user.teamActiveDeposit));
-        // Next rank logic similar to before...
-    } catch (err) { }
+        updateText('team-total-deposit', format(user.teamTotalDeposit)); // Added extra fields
+    } catch (err) { console.error(err); }
 }
 
 function start8HourCountdown() {
@@ -314,5 +332,5 @@ function updateNavbar(addr) {
     if(btn) btn.innerText = addr.substring(0,6) + "..." + addr.substring(38);
 }
 
-
 window.addEventListener('load', init);
+
