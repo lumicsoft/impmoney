@@ -3,300 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Referral System | Earn BNB</title>
+    <title>Team & Network - Pro Max</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="style1.css">
     <style>
-        /* BNB Logo Styling */
-        .bnb-icon { width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 4px; filter: drop-shadow(0 0 2px rgba(243, 186, 47, 0.4)); }
-        .bnb-icon-lg { width: 30px; height: 30px; display: inline-block; vertical-align: middle; margin-right: 8px; }
-        .bnb-icon-sm { width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 2px; }
-        
-        /* New Compound Button Style */
-        .compound-btn-black {
-            background: #000000 !important;
-            color: #f59e0b !important;
-            border: 1px solid #f59e0b !important;
-            transition: all 0.3s ease;
+        :root {
+            --soft-gold: #b8860b;
+            --soft-blue: #2d5a7e;
+            --soft-purple: #6a4c93;
+            --panel-bg: #080810;
         }
-        .compound-btn-black:hover {
-            background: #f59e0b !important;
-            color: #000000 !important;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+        body {
+            background: #050505;
+            background-image: radial-gradient(circle at 50% 50%, #111122 0%, #050505 100%);
+            background-attachment: fixed;
+            color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
+        .premium-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .premium-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, var(--soft-gold), var(--soft-blue), var(--soft-purple), var(--soft-gold));
+            animation: slowRotate 10s linear infinite;
+            filter: blur(8px);
+            z-index: 1;
+        }
+        .inner-content {
+            position: relative;
+            margin: 2.5px;
+            background: var(--panel-bg);
+            border-radius: 14px;
+            padding: 24px 20px;
+            z-index: 2;
+            height: calc(100% - 5px);
+        }
+        @keyframes slowRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        .label-text { font-size: 10px; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-gold-pro {
+            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            color: black !important;
+            font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(184, 134, 11, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .btn-outline-pro {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: white; font-weight: 600; transition: all 0.3s ease;
+        }
+        .luxury-table { width: 100%; border-collapse: collapse; }
+        .luxury-table th { padding: 15px; text-align: left; border-bottom: 2px solid rgba(184, 134, 11, 0.2); color: #FFD700; font-size: 11px; font-family: 'Orbitron'; }
+        .luxury-table td { padding: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 13px; }
+        .bnb-icon { width: 20px; height: 20px; display: inline-block; vertical-align: middle; margin-right: 6px; }
     </style>
 </head>
-<body class="bg-[#050505] text-white">
+<body class="p-4 md:p-10">
 
-    <main class="max-w-7xl mx-auto px-6 relative z-10 pt-10">
-        
-        <div class="premium-border p-6 mb-8">
-            <p class="text-[10px] font-black orbitron text-yellow-500 uppercase mb-3">Your Referral Link</p>
-            <div class="flex items-center gap-3 bg-black/40 p-2 pl-4 rounded-xl border border-white/10">
-                <input id="refURL" type="text" readonly value="Connecting wallet..." class="bg-transparent border-none outline-none w-full text-xs text-gray-300 font-mono">
-                <button onclick="copyLink()" class="gold-btn">COPY</button>
-            </div>
+    <main class="max-w-7xl mx-auto space-y-6">
+
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-5">
+            <div class="premium-card"><div class="inner-content text-center">
+                <i data-lucide="users" class="w-6 h-6 text-green-400 mx-auto mb-2"></i>
+                <p class="label-text">Referral Team</p>
+                <h3 id="direct-count" class="text-xl font-black orbitron mt-1">0</h3>
+            </div></div>
+            <div class="premium-card"><div class="inner-content text-center">
+                <i data-lucide="network" class="w-6 h-6 text-emerald-400 mx-auto mb-2"></i>
+                <p class="label-text">Total Team</p>
+                <h3 id="team-count" class="text-xl font-black orbitron mt-1">0</h3>
+            </div></div>
+            <div class="premium-card"><div class="inner-content text-center">
+                <i data-lucide="banknote" class="w-6 h-6 text-yellow-500 mx-auto mb-2"></i>
+                <p class="label-text">Total Earnings</p>
+                <h3 class="text-xl font-black orbitron mt-1 flex items-center justify-center">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon">
+                    <span id="total-earned">0.00</span>
+                </h3>
+            </div></div>
+            <div class="premium-card"><div class="inner-content text-center">
+                <i data-lucide="user-plus" class="w-6 h-6 text-yellow-600 mx-auto mb-2"></i>
+                <p class="label-text">Direct Earn</p>
+                <h3 class="text-xl font-black orbitron mt-1 flex items-center justify-center">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon">
+                    <span id="direct-earnings">0.00</span>
+                </h3>
+            </div></div>
+            <div class="premium-card lg:col-span-1 col-span-2"><div class="inner-content text-center">
+                <i data-lucide="layers" class="w-6 h-6 text-purple-500 mx-auto mb-2"></i>
+                <p class="label-text">Level Earn</p>
+                <h3 class="text-xl font-black orbitron mt-1 flex items-center justify-center">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon">
+                    <span id="level-earnings">0.00</span>
+                </h3>
+            </div></div>
         </div>
 
-        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-            <div class="premium-border p-5 text-center flex flex-col items-center">
-                <i data-lucide="users" class="w-6 h-6 text-green-400 mb-2"></i>
-                <p class="text-[8px] font-bold text-gray-400 uppercase">Referral Team</p>
-                <h3 id="direct-count" class="text-xl font-black orbitron">0</h3>
-            </div>
-            <div class="premium-border p-5 text-center flex flex-col items-center">
-                <i data-lucide="network" class="w-6 h-6 text-emerald-400 mb-2"></i>
-                <p class="text-[8px] font-bold text-gray-400 uppercase">Total Team</p>
-                <h3 id="team-count" class="text-xl font-black orbitron">0</h3>
-            </div>
-            <div class="premium-border p-5 text-center flex flex-col items-center">
-                <i data-lucide="banknote" class="w-6 h-6 text-yellow-500 mb-2"></i>
-                <p class="text-[8px] font-bold text-gray-400 uppercase">Total Earnings</p>
-                <h3 class="text-xl font-black orbitron flex items-center">
-                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon">
-                    <span id="total-earned">0.000</span>
-                </h3>
-            </div>
-            <div class="premium-border p-5 text-center flex flex-col items-center">
-                <i data-lucide="user-plus" class="w-6 h-6 text-yellow-600 mb-2"></i>
-                <p class="text-[8px] font-bold text-gray-400 uppercase">Direct Earnings</p>
-                <h3 class="text-xl font-black orbitron flex items-center">
-                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon">
-                    <span id="direct-earnings">0.000</span>
-                </h3>
-            </div>
-            <div class="premium-border p-5 text-center flex flex-col items-center col-span-2 lg:col-span-1">
-                <i data-lucide="layers" class="w-6 h-6 text-green-500 mb-2"></i>
-                <p class="text-[8px] font-bold text-gray-400 uppercase">Level Earnings</p>
-                <h3 class="text-xl font-black orbitron flex items-center">
-                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon">
-                    <span id="level-earnings">0.000</span>
-                </h3>
-            </div>
-        </div>
-
-        <div class="premium-border p-6 mb-8 text-center">
-            <p class="text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">Available Network Income</p>
-            <h2 class="text-3xl font-black orbitron text-white italic mb-6 flex items-center justify-center">
-                <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon-lg">
-                <span id="ref-balance-display">0.000</span>
-            </h2>
-            <div class="flex flex-col md:flex-row gap-3">
-                <button onclick="handleClaim()" class="gold-btn flex-1 !py-3 flex items-center justify-center gap-2">
-                    <i data-lucide="download" class="w-4 h-4"></i> Withdraw Income
-                </button>
-                <button onclick="handleCompoundDaily()" class="gold-btn compound-btn-black flex-1 !py-3 flex items-center justify-center gap-2">
-                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Compound Now
-                </button>
-            </div>
-        </div>
-
-        <div class="premium-border mb-8 p-6 md:p-8">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-                <h3 class="text-xl font-black orbitron uppercase italic"><span class="text-yellow-500">Team</span> Report</h3>
-                <div class="flex items-center gap-3 bg-black/50 p-2 rounded-xl border border-white/10 w-full md:w-auto">
-                    <span class="text-[10px] font-bold uppercase text-gray-400 ml-2">Select Level:</span>
-                    <select id="levelSelect" onchange="loadLevelData(this.value)" class="bg-[#0b0b0b] text-yellow-500 font-bold outline-none cursor-pointer">
-                        <option value="1">Level 1</option>
-                        <option value="2">Level 2</option>
-                        <option value="3">Level 3</option>
-                        <option value="4">Level 4</option>
-                        <option value="5">Level 5</option>
-                        <option value="6">Level 6</option>
-                        <option value="7">Level 7</option>
-                        <option value="8">Level 8</option>
-                        <option value="9">Level 9</option>
-                        <option value="10">Level 10</option>
-                        <option value="11">Level 11</option>
-                        <option value="12">Level 12</option>
-                        <option value="13">Level 13</option>
-                        <option value="14">Level 14</option>
-                        <option value="15">Level 15</option>
-                        <option value="16">Level 16</option>
-                        <option value="17">Level 17</option>
-                        <option value="18">Level 18</option>
-                        <option value="19">Level 19</option>
-                        <option value="20">Level 20</option>
-                        <option value="21">Level 21</option>
-                        <option value="22">Level 22</option>
-                        <option value="23">Level 23</option>
-                        <option value="24">Level 24</option>
-                        <option value="25">Level 25</option>
-                    </select>
+        <div class="premium-card">
+            <div class="inner-content !block py-10 text-center">
+                <p class="label-text tracking-[6px] mb-3 opacity-60">Available Network Income</p>
+                <h2 class="text-4xl font-black orbitron text-white italic mb-8 flex items-center justify-center">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="w-10 h-10 mr-3">
+                    $<span id="ref-balance-display">0.000</span>
+                </h2>
+                <div class="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
+                    <button onclick="handleClaim()" class="btn-gold-pro px-12 py-4 rounded-xl orbitron text-xs flex-1 uppercase">Withdraw Income</button>
+                    <button onclick="handleCompoundDaily()" class="btn-outline-pro px-12 py-4 rounded-xl orbitron text-xs flex-1 uppercase">Compound Now <i data-lucide="zap" class="w-3 h-3 inline-block ml-1"></i></button>
                 </div>
             </div>
+        </div>
 
-            <div class="overflow-x-auto">
-                <table class="luxury-table w-full text-left">
-                    <thead>
-                        <tr class="border-b border-white/10">
-                            <th class="p-4">User Address</th><th>Level</th><th>Total Deposit</th><th>Team Volume</th><th>Active Volume</th><th>Status</th><th>Join Date</th>
-                        </tr>
-                    </thead>
-                    <tbody id="team-table-body" class="text-gray-300">
-                        <tr>
-                            <td colspan="7" class="p-10 text-center text-gray-500 italic">Connect wallet to view report</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="premium-card">
+            <div class="inner-content !block">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+                    <h3 class="text-lg font-black orbitron uppercase italic"><span class="text-yellow-500">Team</span> Report</h3>
+                    <div class="flex items-center gap-3 bg-black/50 p-2 px-4 rounded-xl border border-white/10">
+                        <span class="label-text">Select Level:</span>
+                        <select id="levelSelect" onchange="loadLevelData(this.value)" class="bg-transparent text-yellow-500 font-black orbitron text-xs outline-none cursor-pointer">
+                            <script>
+                                for(let i=1; i<=25; i++) document.write(`<option value="${i}">Level ${i}</option>`);
+                            </script>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="luxury-table">
+                        <thead>
+                            <tr>
+                                <th>USER ADDRESS</th>
+                                <th>LEVEL</th>
+                                <th>TOTAL DEPOSIT</th>
+                                <th>TEAM VOLUME</th>
+                                <th>ACTIVE VOLUME</th>
+                                <th>STATUS</th>
+                                <th>JOIN DATE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="team-table-body" class="text-gray-300">
+                            <tr><td colspan="7" class="p-10 text-center text-gray-500 italic">Connect wallet to view report</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
-    <script src="components.js"></script>
     <script src="web3-handler.js"></script>
-   <script>
-    lucide.createIcons();
+    <script>
+        lucide.createIcons();
 
-    // --- DATA LOADING LOGIC ---
-    async function loadReferralData() {
-        // Wait for web3-handler.js to initialize contract and signer
-        if (typeof window.contract === 'undefined' || !window.signer) {
-            setTimeout(loadReferralData, 1000);
-            return;
-        }
-
-        try {
-            const address = await window.signer.getAddress();
-            const [user, extra] = await Promise.all([
-                window.contract.users(address),
-                window.contract.usersExtra(address)
-            ]);
-
-            if (!user.registered) return;
-
-            // Stats Update using global format() from web3-handler
-            document.getElementById('direct-count').innerText = extra.directsCount.toString();
-            document.getElementById('team-count').innerText = extra.teamCount.toString();
-            
-            document.getElementById('total-earned').innerText = format(user.totalEarnings);
-            document.getElementById('level-earnings').innerText = format(extra.rewardsReferral);
-            document.getElementById('direct-earnings').innerText = format(extra.rewardsOnboarding);
-
-            // --- NETWORK INCOME CALCULATION (Total of 4 rewards) ---
-            const referralInc = extra.rewardsReferral;
-            const onboardingInc = extra.rewardsOnboarding;
-            const rankInc = extra.rewardsRank;
-            const reserveInc = extra.reserveNetwork;
-
-            // Summing up all network-related incomes
-            const totalNetworkRaw = referralInc.add(onboardingInc).add(rankInc).add(reserveInc);
-            
-            // Display Total Balance using format()
-            document.getElementById('ref-balance-display').innerText = format(totalNetworkRaw);
-            
-            // Storing raw BigNumber for contract calls
-            window.currentRefBalance = totalNetworkRaw;
-
-            // Referral Link Generation
-            const baseUrl = window.location.origin + window.location.pathname.replace('referral.html', '');
-            document.getElementById('refURL').value = `${baseUrl}register.html?ref=${user.username}`;
-
-            // Load Team Data for Level 1 by default
-            loadLevelData(1);
-        } catch (err) { 
-            console.error("Referral Page Load Error:", err); 
-        }
-    }
-
-    // --- TEAM TABLE LOGIC ---
-    async function loadLevelData(level) {
-        const tableBody = document.getElementById('team-table-body');
-        if(!tableBody) return;
-        
-        tableBody.innerHTML = `<tr><td colspan="7" class="p-10 text-center text-yellow-500 orbitron animate-pulse text-xs">SCANNING LEVEL ${level}...</td></tr>`;
-
-        try {
-            const address = await window.signer.getAddress();
-            const res = await window.contract.getLevelTeamDetails(address, level);
-            
-            // Handle different ABI return formats (named vs indexed)
-            const names = res.names || res[0] || [];
-            const wallets = res.wallets || res[1] || [];
-            const joinDates = res.joinDates || res[2] || [];
-            const activeDeps = res.activeDeps || res[3] || [];
-            const teamTotalDeps = res.teamTotalDeps || res[4] || [];
-
-            if (!wallets || wallets.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="7" class="p-10 text-center text-gray-500 italic">No users found in Level ${level}</td></tr>`;
+        async function loadReferralData() {
+            if (typeof window.contract === 'undefined' || !window.signer) {
+                setTimeout(loadReferralData, 1000);
                 return;
             }
+            try {
+                const address = await window.signer.getAddress();
+                const [user, extra] = await Promise.all([
+                    window.contract.users(address),
+                    window.contract.usersExtra(address)
+                ]);
 
-            let html = '';
-            for (let i = 0; i < wallets.length; i++) {
-                const uA = wallets[i];
-                if (!uA || uA === ethers.constants.AddressZero) continue;
+                if (!user.registered) return;
 
-                const activeAmt = format(activeDeps[i]);
-                const teamVol = format(teamTotalDeps[i]);
-                const joinDate = new Date(joinDates[i].toNumber() * 1000).toLocaleDateString();
-                
-                const statusLabel = parseFloat(activeAmt) > 0 
-                    ? '<span class="text-green-400 font-bold text-[10px]">[ACTIVE]</span>' 
-                    : '<span class="text-red-500 font-bold text-[10px]">[INACTIVE]</span>';
+                document.getElementById('direct-count').innerText = extra.directsCount.toString();
+                document.getElementById('team-count').innerText = extra.teamCount.toString();
+                document.getElementById('total-earned').innerText = format(user.totalEarnings);
+                document.getElementById('level-earnings').innerText = format(extra.rewardsReferral);
+                document.getElementById('direct-earnings').innerText = format(extra.rewardsOnboarding);
 
-                html += `
-                <tr class="border-b border-white/5 hover:bg-white/5 transition-colors text-[11px]">
-                    <td class="p-4 font-mono text-yellow-500">
-                        <div class="flex flex-col">
-                            <span>${uA.substring(0, 8)}...${uA.substring(34)}</span>
-                            <span class="text-[9px] text-gray-500 font-sans italic">${names[i] || 'N/A'}</span>
-                        </div>
-                    </td>
-                    <td class="p-4 font-bold text-gray-400">Lvl ${level}</td>
-                    <td class="p-4 font-black text-white">${activeAmt}</td>
-                    <td class="p-4 text-gray-400">${teamVol}</td>
-                    <td class="p-4">
-                        <div class="flex flex-col">
-                            <span class="text-white font-bold">${activeAmt}</span>
-                            ${statusLabel}
-                        </div>
-                    </td>
-                    <td class="p-4 text-yellow-500 italic font-black uppercase">RECORDED</td>
-                    <td class="p-4 text-gray-500 font-mono">${joinDate}</td>
-                </tr>`;
-            }
-            tableBody.innerHTML = html;
-        } catch (err) {
-            console.error("Team Table Error:", err);
-            tableBody.innerHTML = `<tr><td colspan="7" class="p-10 text-center text-red-500">Blockchain Sync Error</td></tr>`;
+                const totalNetworkRaw = extra.rewardsReferral.add(extra.rewardsOnboarding).add(extra.rewardsRank).add(extra.reserveNetwork);
+                document.getElementById('ref-balance-display').innerText = format(totalNetworkRaw);
+                window.currentRefBalance = totalNetworkRaw;
+
+                loadLevelData(1);
+            } catch (err) { console.error(err); }
         }
-    }
 
-    // --- ACTIONS (Connecting to web3-handler.js) ---
+        async function loadLevelData(level) {
+            const tableBody = document.getElementById('team-table-body');
+            tableBody.innerHTML = `<tr><td colspan="7" class="p-10 text-center text-yellow-500 orbitron animate-pulse text-[10px]">SCANNING LEVEL ${level}...</td></tr>`;
 
-    // Updated handleClaim to call handler's global function
-    window.handleClaim = async function() {
-        if (!window.currentRefBalance || window.currentRefBalance.eq(0)) {
-            return alert("No network income to withdraw!");
+            try {
+                const address = await window.signer.getAddress();
+                const res = await window.contract.getLevelTeamDetails(address, level);
+                const wallets = res.wallets || res[1] || [];
+                const names = res.names || res[0] || [];
+                const joinDates = res.joinDates || res[2] || [];
+                const activeDeps = res.activeDeps || res[3] || [];
+                const teamTotalDeps = res.teamTotalDeps || res[4] || [];
+
+                if (!wallets.length) {
+                    tableBody.innerHTML = `<tr><td colspan="7" class="p-10 text-center text-gray-500 italic">No users found in Level ${level}</td></tr>`;
+                    return;
+                }
+
+                let html = '';
+                for (let i = 0; i < wallets.length; i++) {
+                    const activeAmt = format(activeDeps[i]);
+                    const statusLabel = parseFloat(activeAmt) > 0 ? '<span class="text-green-400 font-bold">[ACTIVE]</span>' : '<span class="text-red-500 font-bold">[INACTIVE]</span>';
+                    const dt = new Date(joinDates[i].toNumber() * 1000).toLocaleDateString();
+
+                    html += `<tr>
+                        <td class="font-mono text-yellow-500">${wallets[i].substring(0,8)}...${wallets[i].substring(34)}<br><span class="text-[10px] text-gray-500 font-sans">${names[i] || 'N/A'}</span></td>
+                        <td class="font-bold text-gray-400">Lvl ${level}</td>
+                        <td class="font-black text-white">${activeAmt}</td>
+                        <td class="text-gray-400">${format(teamTotalDeps[i])}</td>
+                        <td class="text-white font-bold">${activeAmt}</td>
+                        <td>${statusLabel}</td>
+                        <td class="text-gray-500 font-mono">${dt}</td>
+                    </tr>`;
+                }
+                tableBody.innerHTML = html;
+            } catch (err) { tableBody.innerHTML = `<tr><td colspan="7" class="p-10 text-center text-red-500">Blockchain Sync Error</td></tr>`; }
         }
-        // Direct call to web3-handler global function
-        await window.claimNetworkReward(window.currentRefBalance);
-    }
 
-    // Updated handleCompound to call handler's global function
-    window.handleCompoundDaily = async function() {
-        if (!window.currentRefBalance || window.currentRefBalance.eq(0)) {
-            return alert("No network income to compound!");
-        }
-        // Direct call to web3-handler global function
-        await window.compoundNetworkReward(window.currentRefBalance);
-    }
-
-    window.copyLink = function() {
-        const copyText = document.getElementById("refURL");
-        copyText.select();
-        navigator.clipboard.writeText(copyText.value);
-        alert("Referral Link Copied!");
-    }
-
-    // Initialize after a short delay to ensure Ethers is ready
-    window.addEventListener('load', () => setTimeout(loadReferralData, 1200));
-</script>
+        window.addEventListener('load', () => setTimeout(loadReferralData, 1200));
+    </script>
 </body>
 </html>
-
