@@ -319,14 +319,37 @@ async function fetchAllData(address) {
 
 async function fetchLeadershipData(address) {
     try {
-        const [user, extra] = await Promise.all([contract.users(address), contract.usersExtra(address)]);
-        const rIdx = extra.rank;
-        updateText('rank-display', RANK_DETAILS[rIdx].name);
-        updateText('team-active-deposit', format(user.teamActiveDeposit));
-        updateText('team-total-deposit', format(user.teamTotalDeposit)); // Added extra fields
-    } catch (err) { console.error(err); }
-}
+        // 1. Contract se dono mapping ka data fetch karna
+        const [user, extra] = await Promise.all([
+            contract.users(address), 
+            contract.usersExtra(address)
+        ]);
 
+        // 2. Simple Numbers mein convert karna
+        const teamActiveVol = parseFloat(ethers.utils.formatUnits(user.teamActiveDeposit, 18));
+        const teamTotalVol = parseFloat(ethers.utils.formatUnits(user.teamTotalDeposit, 18));
+        const rankRewards = parseFloat(ethers.utils.formatUnits(extra.rewardsRank, 18));
+        const teamCount = extra.teamCount; // Ye missing tha
+        const directsQuali = extra.directsQuali;
+
+        // 3. UI Elements ko update karna (Jo aapne HTML mein IDs di hain)
+        updateText('team-active-deposit', teamActiveVol.toFixed(2));
+        updateText('team-total-deposit', teamTotalVol.toFixed(2));
+        updateText('rank-reward-available', rankRewards.toFixed(2));
+        updateText('current-team-count', teamCount);
+        updateText('directs-quali', directsQuali);
+        updateText('current-team-volume', teamActiveVol.toFixed(0));
+
+        // 4. Sabse Zaruri: Rank Progress Bar aur Next Target update karna
+        // Ye function aapne HTML page ke script tag mein likha hai
+        if (typeof updateRankUI === "function") {
+            updateRankUI(extra, teamActiveVol);
+        }
+
+    } catch (err) { 
+        console.error("Leadership Data Error:", err); 
+    }
+}
 function start8HourCountdown() {
     const timerElement = document.getElementById('next-timer');
     if (!timerElement) return;
@@ -354,6 +377,7 @@ function updateNavbar(addr) {
 }
 
 window.addEventListener('load', init);
+
 
 
 
