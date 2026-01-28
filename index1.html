@@ -59,32 +59,57 @@
 
         .orbitron { font-family: 'Orbitron', sans-serif; }
         
-        .stat-box { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+        .stat-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
         .label-text { font-size: 10px; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
         .amount-text { font-size: 20px; font-weight: 800; color: #ffffff !important; text-align: right; }
 
         .btn-gold-pro {
             background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
             color: black !important;
-            font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             box-shadow: 0 4px 15px rgba(184, 134, 11, 0.4);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(255,255,255,0.3);
         }
-        .btn-gold-pro:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(184, 134, 11, 0.6); }
+        .btn-gold-pro:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(184, 134, 11, 0.6);
+            filter: brightness(1.1);
+        }
 
         .btn-outline-pro {
             border: 1px solid rgba(255, 255, 255, 0.2);
             background: rgba(255, 255, 255, 0.05);
-            color: white; font-weight: 600; transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
+        /* Improved Input Design */
         .deposit-input-field {
             background: #000000 !important;
             border: 1px solid rgba(184, 134, 11, 0.3);
-            color: #FFD700; border-radius: 12px; padding: 12px 16px; outline: none;
-            font-family: 'Orbitron', sans-serif; box-shadow: inset 0 2px 10px rgba(0,0,0,0.8);
-            width: 100%; text-align: left;
+            color: #FFD700;
+            border-radius: 12px;
+            padding: 12px 16px;
+            outline: none;
+            font-family: 'Orbitron', sans-serif;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.8);
+            width: 100%;
+            text-align: left;
+        }
+        .deposit-input-field:focus {
+            border-color: #FFD700;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.8), 0 0 10px rgba(184, 134, 11, 0.2);
         }
 
         .info-row {
@@ -93,11 +118,11 @@
             border-radius: 10px; margin-bottom: 6px; border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .luxury-table { width: 100%; border-collapse: collapse; }
-        .luxury-table th { padding: 15px; text-align: left; border-bottom: 2px solid rgba(184, 134, 11, 0.2); color: #FFD700; font-size: 11px; font-family: 'Orbitron'; }
-        .luxury-table td { padding: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 14px; }
-
-        .animate-spin-slow { animation: slowRotate 8s linear infinite; }
+        body::after {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px; z-index: -1;
+        }
     </style>
 </head>
 <body class="p-4 md:p-10">
@@ -155,30 +180,37 @@
                 <div class="flex items-center gap-3"><i data-lucide="database" class="text-yellow-600 w-6 h-6"></i><p class="label-text">Deposits</p></div>
                 <h3 class="amount-text orbitron">$<span id="total-deposit">0.00</span></h3>
             </div></div>
+            
             <div class="premium-card"><div class="inner-content stat-box">
                 <div class="flex items-center gap-3"><i data-lucide="zap" class="text-green-600 w-6 h-6"></i><p class="label-text">Active</p></div>
                 <h3 class="amount-text orbitron">$<span id="active-deposit">0.00</span></h3>
             </div></div>
+
             <div class="premium-card"><div class="inner-content stat-box">
                 <div class="flex items-center gap-3"><i data-lucide="users" class="text-blue-600 w-6 h-6"></i><p class="label-text">Level</p></div>
                 <h3 class="amount-text orbitron">$<span id="level-earning">0.00</span></h3>
             </div></div>
+
             <div class="premium-card"><div class="inner-content stat-box">
                 <div class="flex items-center gap-3"><i data-lucide="medal" class="text-purple-600 w-6 h-6"></i><p class="label-text">Rank</p></div>
                 <h3 class="amount-text orbitron">$<span id="rank-earning">0.00</span></h3>
             </div></div>
+
             <div class="premium-card"><div class="inner-content stat-box">
                 <div class="flex items-center gap-3"><i data-lucide="trending-up" class="text-emerald-600 w-6 h-6"></i><p class="label-text">Total Earned</p></div>
                 <h3 class="amount-text orbitron">$<span id="total-earned">0.00</span></h3>
             </div></div>
+
             <div class="premium-card"><div class="inner-content stat-box">
                 <div class="flex items-center gap-3"><i data-lucide="wallet" class="text-sky-500 w-6 h-6"></i><p class="label-text">Withdraw</p></div>
                 <h3 class="amount-text orbitron">$<span id="withdrawable">0.00</span></h3>
             </div></div>
+
             <div class="premium-card"><div class="inner-content stat-box">
                 <div class="flex items-center gap-3"><i data-lucide="external-link" class="text-red-600 w-6 h-6"></i><p class="label-text">Paid Out</p></div>
                 <h3 class="amount-text orbitron">$<span id="total-withdrawn">0.00</span></h3>
             </div></div>
+
             <div class="premium-card"><div class="inner-content stat-box">
                 <div class="flex items-center gap-3"><i data-lucide="shield-check" class="text-yellow-600 w-6 h-6"></i><p class="label-text">Status</p></div>
                 <h3 class="text-xs font-black orbitron text-yellow-500">ACTIVE</h3>
@@ -186,67 +218,10 @@
         </div>
 
         <div class="premium-card">
-            <div class="inner-content !block py-10 px-6">
-                <div class="flex justify-between items-center mb-10">
-                    <h2 class="text-xl font-black orbitron italic uppercase">Compound <span class="text-yellow-500">Power</span></h2>
-                    <span id="status-badge" class="px-4 py-1 rounded-full bg-red-500/20 text-red-500 text-[10px] font-black border border-red-500/30 uppercase animate-pulse">● Inactive Status</span>
-                </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                    <div class="lg:col-span-4 bg-black/50 rounded-[32px] p-10 border border-white/10 text-center relative overflow-hidden">
-                        <div class="w-32 h-32 rounded-full border-8 border-yellow-500/10 flex items-center justify-center mb-4 mx-auto relative">
-                            <div class="absolute inset-0 animate-spin-slow border-t-4 border-yellow-500 rounded-full"></div>
-                            <span id="cp-display" class="text-4xl font-black orbitron text-white">0.00</span>
-                        </div>
-                        <p class="text-xs font-black text-gray-400 uppercase tracking-widest">Available CP</p>
-                    </div>
-
-                    <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="p-8 bg-white/5 rounded-2xl border border-white/10">
-                            <p class="text-xs font-black text-yellow-500 uppercase mb-2">Daily Earnings <span id="daily-perc-display" class="text-white ml-2">5-6.00%</span></p>
-                            <h4 class="text-4xl font-black orbitron text-white">$<span id="projected-return">0.00</span></h4>
-                            <p class="text-[10px] text-gray-400 uppercase mt-2">Projected 24h Return</p>
-                        </div>
-                        <div class="p-8 bg-white/5 rounded-2xl border border-white/10">
-                            <p class="text-xs font-black text-yellow-500 uppercase mb-2">Next Settlement</p>
-                            <h4 id="next-timer" class="text-4xl font-black orbitron text-white">00:00:00</h4>
-                            <p class="text-[10px] text-green-400 uppercase mt-2 tracking-widest italic font-bold">Auto Distribution Enabled</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="premium-card">
             <div class="inner-content !block py-8 text-center">
                 <p class="label-text tracking-[8px] mb-3 opacity-60">Working Balance</p>
-                <h3 class="text-4xl font-black orbitron text-white mb-8">$<span id="compounding-balance">0.00</span></h3>
-                <div class="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
-                    <button onclick="handleClaim()" class="btn-gold-pro px-12 py-4 rounded-xl orbitron text-xs flex-1">WITHDRAW PROFIT</button>
-                    <button onclick="handleCompoundDaily()" class="btn-outline-pro px-12 py-4 rounded-xl orbitron text-xs flex-1">COMPOUND NOW <i data-lucide="zap" class="w-3 h-3 inline-block ml-1"></i></button>
-                </div>
-            </div>
-        </div>
-
-        <div class="premium-card">
-            <div class="inner-content !block">
-                <h3 class="text-sm font-black orbitron mb-6 uppercase italic text-yellow-500 tracking-widest">Daily Returns by CP Level</h3>
-                <div class="overflow-x-auto">
-                    <table class="luxury-table">
-                        <thead>
-                            <tr>
-                                <th>CP VALUE (USDT Equivalent)</th>
-                                <th>DAILY RETURN</th>
-                            </tr>
-                        </thead>
-                        <tbody id="cp-chart-body">
-                            <tr><td>< 500 USDT</td><td class="text-green-400 font-bold">5.00%</td></tr>
-                            <tr class="bg-white/5"><td>500 - 1000 USDT</td><td class="text-green-400 font-bold">5.25%</td></tr>
-                            <tr><td class="text-yellow-500 font-bold">1001 - 3000 USDT 🔥</td><td class="text-yellow-500 font-bold">5.50%</td></tr>
-                            <tr class="bg-yellow-500/10"><td class="text-yellow-400 font-black">≥ 5000 USDT 🔥</td><td class="text-yellow-400 font-black">6.00%</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+                <h3 class="text-4xl font-black orbitron text-white mb-6">$<span id="compounding-balance">0.00</span></h3>
+                <button onclick="handleClaim()" class="btn-gold-pro px-16 py-3.5 rounded-xl orbitron text-xs shadow-lg">WITHDRAW PROFIT</button>
             </div>
         </div>
 
@@ -276,10 +251,9 @@
         }
 
         function handleDeposit() { console.log("Deposit Triggered"); }
-        function handleClaim() { console.log("Profit Withdraw Triggered"); }
-        function handleCompoundDaily() { console.log("Compound Triggered"); }
         function withdrawCapital() { console.log("Capital Withdraw Triggered"); }
         function reinvestCapital() { console.log("Capital Reinvest Triggered"); }
+        function handleClaim() { console.log("Profit Withdraw Triggered"); }
     </script>
 </body>
 </html>
