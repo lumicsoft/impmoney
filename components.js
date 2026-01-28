@@ -1,117 +1,85 @@
-document.addEventListener("DOMContentLoaded", async function () {
-    // 1. Auth Page Check
-    const isAuthPage = document.getElementById('auth-page') || 
-                       window.location.pathname.includes('register.html') || 
-                       window.location.pathname.includes('login.html');
-
-    // 2. Inject Dots Background
-    const dotsHTML = `<div class="dots-container"><div class="dots dots-white"></div><div class="dots dots-cyan"></div></div>`;
-    document.body.insertAdjacentHTML('afterbegin', dotsHTML);
-
+document.addEventListener("DOMContentLoaded", function () {
+    // 1. Instant Page Check
+    const path = window.location.pathname;
+    const isAuthPage = document.getElementById('auth-page') || path.includes('register.html') || path.includes('login.html');
     if (isAuthPage) return;
 
-    // 3. Check Wallet Status
-    let walletAddress = "";
-    let isConnected = false;
-    if (window.ethereum) {
-        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-        if (accounts.length > 0) {
-            walletAddress = accounts[0];
-            isConnected = true;
-        }
-    }
-
-    // 4. Inject Navbar (Desktop)
+    // 2. Fast UI Injection (Bina wait kiye)
     const navHTML = `
-        <nav class="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center relative z-50">
-            <div class="flex items-center gap-2 cursor-pointer" onclick="location.href='index1.html'">
-                <div class="w-10 h-10 bg-gradient-to-tr from-yellow-400 to-yellow-600 rounded-xl flex items-center justify-center shadow-lg shadow-yellow-500/20">
-                    <i data-lucide="component" class="text-black w-6 h-6"></i>
+        <nav class="fixed top-0 left-0 w-full z-[100] bg-black/40 backdrop-blur-md border-b border-white/5">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="location.href='index1.html'">
+                    <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center shadow-lg shadow-yellow-500/20">
+                        <i data-lucide="zap" class="text-black w-5 h-5"></i>
+                    </div>
+                    <span class="text-lg font-black orbitron tracking-tighter uppercase text-white">
+                        PRO <span class="text-yellow-500">MAX</span>
+                    </span>
                 </div>
-                <span class="text-xl font-black orbitron tracking-tighter uppercase">
-                    Earn <span class="text-gradient">BNB</span>
-                </span>
-            </div>
-            
-            <div class="hidden md:flex gap-4">
-                <button class="gold-btn !py-2 !px-5" onclick="location.href='index1.html'">Dashboard</button>
-                <button class="gold-btn !py-2 !px-5" onclick="location.href='deposits.html'">Position</button>
-                <button class="gold-btn !py-2 !px-5" onclick="location.href='referral.html'">Referral</button>
-                <button class="gold-btn !py-2 !px-5" onclick="location.href='leadership.html'">Leadership</button>
-                <button class="gold-btn !py-2 !px-5" onclick="location.href='history.html'">History</button>
-            </div>
-            
-            <div class="relative flex flex-col items-center">
-                <button id="connect-btn" onclick="handleLogin()" class="gold-btn">
-                    ${isConnected ? walletAddress.substring(0, 6) + "..." + walletAddress.substring(38) : "Connect Wallet"}
-                </button>
                 
-                <button id="logout-icon-btn" onclick="handleLogout()" 
-                    style="display: ${isConnected ? 'flex' : 'none'}; position: absolute; top: 100%; margin-top: 4px;" 
-                    class="p-1 text-red-500 hover:text-red-400 transition-all cursor-pointer items-center justify-center"
-                    title="Logout">
-                    <i data-lucide="power" class="w-4 h-4"></i>
-                </button>
+                <div class="hidden md:flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
+                    <button onclick="location.href='index1.html'" class="px-4 py-2 rounded-lg text-[11px] font-bold orbitron uppercase transition-all ${path.includes('index1.html') ? 'bg-yellow-500 text-black' : 'text-gray-400 hover:text-white'}">Dashboard</button>
+                    <button onclick="location.href='deposits.html'" class="px-4 py-2 rounded-lg text-[11px] font-bold orbitron uppercase transition-all ${path.includes('deposits.html') ? 'bg-yellow-500 text-black' : 'text-gray-400 hover:text-white'}">Position</button>
+                    <button onclick="location.href='referral.html'" class="px-4 py-2 rounded-lg text-[11px] font-bold orbitron uppercase transition-all ${path.includes('referral.html') ? 'bg-yellow-500 text-black' : 'text-gray-400 hover:text-white'}">Referral</button>
+                    <button onclick="location.href='leadership.html'" class="px-4 py-2 rounded-lg text-[11px] font-bold orbitron uppercase transition-all ${path.includes('leadership.html') ? 'bg-yellow-500 text-black' : 'text-gray-400 hover:text-white'}">Leadership</button>
+                    <button onclick="location.href='history.html'" class="px-4 py-2 rounded-lg text-[11px] font-bold orbitron uppercase transition-all ${path.includes('history.html') ? 'bg-yellow-500 text-black' : 'text-gray-400 hover:text-white'}">History</button>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <button id="connect-btn" onclick="handleLogin()" class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-[10px] font-bold orbitron hover:bg-white/10 transition-all text-white">
+                        CONNECT
+                    </button>
+                </div>
             </div>
         </nav>
+        <div class="h-20"></div>
     `;
-    document.body.insertAdjacentHTML('afterbegin', navHTML);
 
-    // 5. Inject Premium Floating Mobile Navigation
     const mobileNavHTML = `
-        <div class="fixed bottom-6 left-4 right-4 md:hidden z-[9999]">
-            <div class="bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl flex justify-around items-center p-3 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-                <a href="index1.html" class="flex flex-col items-center gap-1 transition-all ${window.location.pathname.includes('index1.html') ? 'text-yellow-500 scale-110' : 'text-gray-400'}">
-                    <div class="p-2 rounded-xl ${window.location.pathname.includes('index1.html') ? 'bg-yellow-500/10' : ''}">
-                        <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                    </div>
-                    <span class="text-[9px] font-bold orbitron">HOME</span>
+        <div class="fixed bottom-6 left-4 right-4 md:hidden z-[10000]">
+            <div class="bg-black/80 backdrop-blur-2xl border border-white/10 rounded-2xl flex justify-around items-center p-3 shadow-2xl">
+                <a href="index1.html" class="flex flex-col items-center gap-1 ${path.includes('index1.html') ? 'text-yellow-500' : 'text-gray-500'}">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span class="text-[8px] font-bold orbitron">Home</span>
                 </a>
-                <a href="deposits.html" class="flex flex-col items-center gap-1 transition-all ${window.location.pathname.includes('deposits.html') ? 'text-yellow-500 scale-110' : 'text-gray-400'}">
-                    <div class="p-2 rounded-xl ${window.location.pathname.includes('deposits.html') ? 'bg-yellow-500/10' : ''}">
-                        <i data-lucide="gem" class="w-5 h-5"></i>
-                    </div>
-                    <span class="text-[9px] font-bold orbitron">position</span>
+                <a href="deposits.html" class="flex flex-col items-center gap-1 ${path.includes('deposits.html') ? 'text-yellow-500' : 'text-gray-500'}">
+                    <i data-lucide="layers" class="w-5 h-5"></i>
+                    <span class="text-[8px] font-bold orbitron">Stake</span>
                 </a>
-                <a href="referral.html" class="flex flex-col items-center gap-1 transition-all ${window.location.pathname.includes('referral.html') ? 'text-yellow-500 scale-110' : 'text-gray-400'}">
-                    <div class="p-2 rounded-xl ${window.location.pathname.includes('referral.html') ? 'bg-yellow-500/10' : ''}">
-                        <i data-lucide="users-2" class="w-5 h-5"></i>
-                    </div>
-                    <span class="text-[9px] font-bold orbitron">TEAM</span>
+                <a href="referral.html" class="flex flex-col items-center gap-1 ${path.includes('referral.html') ? 'text-yellow-500' : 'text-gray-500'}">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                    <span class="text-[8px] font-bold orbitron">Team</span>
                 </a>
-                <a href="leadership.html" class="flex flex-col items-center gap-1 transition-all ${window.location.pathname.includes('leadership.html') ? 'text-yellow-500 scale-110' : 'text-gray-400'}">
-                    <div class="p-2 rounded-xl ${window.location.pathname.includes('leadership.html') ? 'bg-yellow-500/10' : ''}">
-                        <i data-lucide="award" class="w-5 h-5"></i>
-                    </div>
-                    <span class="text-[9px] font-bold orbitron">RANK</span>
-                </a>
-                <a href="history.html" class="flex flex-col items-center gap-1 transition-all ${window.location.pathname.includes('history.html') ? 'text-yellow-500 scale-110' : 'text-gray-400'}">
-                    <div class="p-2 rounded-xl ${window.location.pathname.includes('history.html') ? 'bg-yellow-500/10' : ''}">
-                        <i data-lucide="history" class="w-5 h-5"></i>
-                    </div>
-                    <span class="text-[9px] font-bold orbitron">Transection</span>
+                <a href="leadership.html" class="flex flex-col items-center gap-1 ${path.includes('leadership.html') ? 'text-yellow-500' : 'text-gray-500'}">
+                    <i data-lucide="award" class="w-5 h-5"></i>
+                    <span class="text-[8px] font-bold orbitron">Rank</span>
                 </a>
             </div>
         </div>
     `;
+
+    // Direct injection
+    document.body.insertAdjacentHTML('afterbegin', navHTML);
     document.body.insertAdjacentHTML('beforeend', mobileNavHTML);
-
-    // 6. Inject Luxury Footer
-    const footerHTML = `
-        <footer class="p-20 text-center border-t border-white/5 relative z-10 mb-20 md:mb-0">
-            <p class="orbitron font-bold text-2xl mb-4 italic">Earn <span class="text-gradient uppercase">BNB</span></p>
-            <p class="text-gray-600 text-[10px] tracking-[1em] uppercase">Decentralized Finance © 2026</p>
-        </footer>
-    `;
     
-    const footerPlaceholder = document.getElementById('footer-placeholder');
-    if (footerPlaceholder) {
-        footerPlaceholder.innerHTML = footerHTML;
-    } else {
-        document.body.insertAdjacentHTML('beforeend', footerHTML);
-    }
+    // Initial Icon Load
+    if (window.lucide) window.lucide.createIcons();
 
-    // Initialize Lucide Icons
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    // 3. Background Wallet Check (Slow task moved here)
+    checkWalletSilently();
 });
 
+async function checkWalletSilently() {
+    if (window.ethereum) {
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            if (accounts.length > 0) {
+                const addr = accounts[0];
+                const btn = document.getElementById('connect-btn');
+                if (btn) btn.innerText = addr.substring(0, 6) + "..." + addr.substring(38);
+            }
+        } catch (err) {
+            console.log("Silent wallet check failed");
+        }
+    }
+}
