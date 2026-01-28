@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Leadership Page Se Liya Gaya Rang aur Logic */
         :root { 
             --soft-gold: #b8860b; 
             --soft-blue: #2d5a7e; 
@@ -30,11 +29,10 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: 24px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Static border */
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.5s ease;
         }
 
-        /* Yeh wahi multi-color moving logic h jo Leadership me h */
         .history-card::before {
             content: '';
             position: absolute;
@@ -42,21 +40,15 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(
-                from 0deg, 
-                var(--soft-gold), 
-                var(--soft-blue), 
-                var(--soft-purple), 
-                var(--soft-gold)
-            );
+            background: conic-gradient(from 0deg, var(--soft-gold), var(--soft-blue), var(--soft-purple), var(--soft-gold));
             animation: slowRotate 8s linear infinite;
-            filter: blur(10px); /* Leadership wala soft blur */
+            filter: blur(10px);
             z-index: 0;
         }
 
         .history-inner {
             position: relative;
-            margin: 2px; /* Border ki motai */
+            margin: 2px;
             background: var(--panel-bg);
             border-radius: 22px;
             padding: 20px;
@@ -66,7 +58,6 @@
             align-items: center;
         }
 
-        /* Filter Buttons Style */
         .filter-btn {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -131,15 +122,20 @@
             lucide.createIcons();
 
             try {
-                const logs = await window.fetchBlockchainHistory(type);
+                // 1. Fetch ALL logs from web3-handler
+                const allLogs = await window.fetchBlockchainHistory(type);
 
-                if(!logs || logs.length === 0) {
-                    container.innerHTML = `<div class="text-center py-20 border border-dashed border-white/5 rounded-[40px]"><p class="text-gray-600 text-[10px] font-bold orbitron uppercase tracking-widest">No ${type} data found</p></div>`;
+                // 2. FILTER logic: Sirf wahi dikhao jo selected type hai
+                // (Agar aapka web3-handler pehle se filter karke de raha hai toh ye line error nahi degi)
+                const filteredLogs = allLogs.filter(log => log.type.toLowerCase() === type.toLowerCase());
+
+                if(!filteredLogs || filteredLogs.length === 0) {
+                    container.innerHTML = `<div class="text-center py-20 border border-dashed border-white/5 rounded-[40px]"><p class="text-gray-600 text-[10px] font-bold orbitron uppercase tracking-widest">No ${type} transactions found</p></div>`;
                     return;
                 }
 
                 let html = '';
-                logs.forEach(item => {
+                filteredLogs.forEach(item => {
                     const isPositive = (type !== 'withdrawal');
                     const label = (type === 'compounding') ? 'REINVESTED' : type.toUpperCase();
 
@@ -169,7 +165,8 @@
                 lucide.createIcons();
 
             } catch (err) {
-                container.innerHTML = `<div class="text-center py-20 text-red-500 orbitron text-[10px]">WEB3 ERROR: PLEASE REFRESH</div>`;
+                console.error(err);
+                container.innerHTML = `<div class="text-center py-20 text-red-500 orbitron text-[10px]">WEB3 ERROR: DATA NOT FOUND</div>`;
             }
         }
 
