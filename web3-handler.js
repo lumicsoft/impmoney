@@ -249,51 +249,72 @@ window.fetchBlockchainHistory = async function(type) {
 // --- DATA FETCHING ---
 async function fetchAllData(address) {
     try {
+        // 1. Contract se saara data fetch karna
         const [user, extra, live] = await Promise.all([
             contract.users(address), 
             contract.usersExtra(address), 
             contract.getLiveBalance(address)
         ]);
 
-        // Dashboard Stats
-        updateText('total-deposit', format(user.totalDeposited)); // grid box ID
-        updateText('total-deposit-display', format(user.totalDeposited));
+        // --- USER PROFILE & ADDRESS ---
+        // Pehle username nahi dikh raha tha, ab yahan se dikhega
+        updateText('username-display', user.username || "USER"); 
+        updateText('user-address', address.substring(0, 6) + "..." + address.substring(38));
+
+        // --- DASHBOARD GRID BOXES ---
+        updateText('total-deposit', format(user.totalDeposited));
         updateText('active-deposit', format(user.totalActiveDeposit));
         updateText('total-earned', format(user.totalEarnings));
         updateText('total-withdrawn', format(user.totalWithdrawn));
-        updateText('team-count', extra.teamCount.toString());
-        updateText('direct-count', extra.directsCount.toString());
         
-        // Income Calculations
+        // Naye IDs jo aapne grid mein add kiye hain
+        updateText('level-earning', format(extra.rewardsReferral)); 
+        updateText('rank-earning', format(extra.rewardsRank)); 
+
+        // --- COMPOUND POWER SECTION ---
         const pendingROI = parseFloat(format(live));
         const reserveDaily = parseFloat(format(extra.reserveDailyROI));
-        const networkIncome = parseFloat(format(extra.rewardsReferral)) + parseFloat(format(extra.rewardsRank));
+        const currentProfit = (pendingROI + reserveDaily).toFixed(4);
 
-        // Compound Power & Balance Section
-        const currentCP = (pendingROI + reserveDaily).toFixed(4);
-        updateText('cp-display', currentCP); // Circle display ID
-        updateText('compounding-balance', currentCP);
-        updateText('ref-balance-display', networkIncome.toFixed(4));
-        updateText('level-earning', format(extra.rewardsReferral)); // new box ID
-        updateText('rank-earning', format(extra.rewardsRank)); // new box ID
-        
-        // Withdraw Section
-        const totalWithdrawable = (pendingROI + reserveDaily + networkIncome).toFixed(4);
-        updateText('withdrawable', totalWithdrawable); 
-        updateText('withdrawable-display', totalWithdrawable);
-        
-        // Projected Return
+        // Circle ke andar active capital dikhana
+        updateText('active-deposit-cp', format(user.totalActiveDeposit));
+        // Daily percentage (Dashboard par fix 5-6% dikhaya hai, par calculation 0.7% per cycle hai)
         const activeAmt = parseFloat(format(user.totalActiveDeposit));
         updateText('projected-return', (activeAmt * 0.007).toFixed(4));
+
+        // --- WITHDRAWABLE & CAPITAL SECTION ---
+        const networkIncome = parseFloat(format(extra.rewardsReferral)) + parseFloat(format(extra.rewardsRank));
+        const totalWithdrawable = (pendingROI + reserveDaily + networkIncome).toFixed(4);
         
-        // Rank
+        updateText('compounding-balance', currentProfit); // Sirf trading profit
+        updateText('withdrawable', totalWithdrawable);    // Total (Profit + Referral)
+        updateText('cap-balance', format(user.totalActiveDeposit)); // Available Capital
+
+        // --- RANK & STATUS ---
         const rankName = await contract.getRankName(extra.rank);
         updateText('rank-display', rankName);
 
-        // Referral URL
-        const baseUrl = window.location.href.split('index1.html')[0] + "register.html";
-        if(document.getElementById('refURL')) document.getElementById('refURL').value = `${baseUrl}?ref=${user.username}`;
-    } catch (err) { console.error(err); }
+        // Status Auto-Update logic
+        const statusText = document.getElementById('main-status-text');
+        const statusBadge = document.getElementById('status-badge');
+        if (activeAmt > 0) {
+            if(statusText) { statusText.innerText = "ACTIVE"; statusText.className = "text-xs font-black orbitron text-green-500"; }
+            if(statusBadge) { 
+                statusBadge.innerHTML = "● Active Status"; 
+                statusBadge.className = "px-4 py-1 rounded-full bg-green-500/20 text-green-500 text-[10px] font-black border border-green-500/30 uppercase"; 
+            }
+        } else {
+            if(statusText) { statusText.innerText = "INACTIVE"; statusText.className = "text-xs font-black orbitron text-red-500"; }
+        }
+
+        // --- REFERRAL URL ---
+        const baseUrl = window.location.origin + window.location.pathname.replace('index1.html', 'register.html');
+        const refField = document.getElementById('refURL');
+        if(refField) refField.value = `${baseUrl}?ref=${user.username}`;
+
+    } catch (err) { 
+        console.error("Data Sync Error:", err); 
+    }
 }
 
 async function fetchLeadershipData(address) {
@@ -333,3 +354,4 @@ function updateNavbar(addr) {
 }
 
 window.addEventListener('load', init);
+
