@@ -8,13 +8,13 @@ const TESTNET_CHAIN_ID = 97;
 // --- RANK CONFIG (Star1 to Master King) ---
 const RANK_DETAILS = [
     { name: "NONE", roi: "0%", targetTeam: 0, targetVolume: 0 },
-    { name: "Star1", roi: "1.00%", targetTeam: 100, targetVolume: 5000 },
-    { name: "Star2", roi: "2.00%", targetTeam: 200, targetVolume: 10000 },
-    { name: "Star3", roi: "3.00%", targetTeam: 500, targetVolume: 25000 },
-    { name: "Star4", roi: "4.00%", targetTeam: 750, targetVolume: 50000 },
-    { name: "Star5", roi: "5.00%", targetTeam: 1000, targetVolume: 100000 },
-    { name: "Kings Star", roi: "7.00%", targetTeam: 2500, targetVolume: 500000 },
-    { name: "Master King", roi: "7.50%", targetTeam: 2500, targetVolume: 500000 }
+    { name: "Star1", roi: "1.00%", targetTeam: 10, targetVolume: 500 },
+    { name: "Star2", roi: "2.00%", targetTeam: 20, targetVolume: 1000 },
+    { name: "Star3", roi: "3.00%", targetTeam: 50, targetVolume: 2500 },
+    { name: "Star4", roi: "4.00%", targetTeam: 75, targetVolume: 5000 },
+    { name: "Star5", roi: "5.00%", targetTeam: 100, targetVolume: 10000 },
+    { name: "Kings Star", roi: "7.00%", targetTeam: 250, targetVolume: 50000 },
+    { name: "Master King", roi: "7.50%", targetTeam: 250, targetVolume: 50000 }
 ];
 
 // --- ABI (Full Updated for USDT Contract) ---
@@ -354,5 +354,6 @@ function updateNavbar(addr) {
 }
 
 window.addEventListener('load', init);
+
 
 
