@@ -1,62 +1,76 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Active Deposits | Earn BNB</title>
+    <title>Active Deposits | Pro Max</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="style1.css">
     <style>
-        .status-badge { background: rgba(34, 197, 94, 0.1); color: #22c55e; padding: 4px 12px; border-radius: 100px; font-size: 10px; font-weight: 800; text-transform: uppercase; border: 1px solid rgba(34, 197, 94, 0.3); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-        .progress-container { background: rgba(255,255,255,0.05); height: 6px; border-radius: 10px; overflow: hidden; }
-        .progress-bar { background: linear-gradient(90deg, #f59e0b, #fbbf24); height: 100%; box-shadow: 0 0 10px rgba(245, 158, 11, 0.5); transition: width 1s ease-in-out; }
-        /* BNB Logo Styling */
-        .bnb-icon { width: 20px; height: 20px; display: inline-block; vertical-align: middle; margin-right: 6px; filter: drop-shadow(0 0 2px rgba(243, 186, 47, 0.4)); }
-        .bnb-icon-sm { width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px; }
+        :root { --soft-gold: #b8860b; --soft-blue: #2d5a7e; --soft-purple: #6a4c93; --panel-bg: #080810; }
+        body { background: #050505; background-image: radial-gradient(circle at 50% 50%, #111122 0%, #050505 100%); background-attachment: fixed; color: white; font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        /* Premium Card & Animation from index1 */
+        .premium-card { position: relative; background: rgba(255, 255, 255, 0.05); border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.4); }
+        .premium-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, var(--soft-gold), var(--soft-blue), var(--soft-purple), var(--soft-gold)); animation: slowRotate 10s linear infinite; filter: blur(8px); z-index: 1; }
+        .inner-content { position: relative; margin: 2.5px; background: var(--panel-bg); border-radius: 14px; padding: 24px 20px; z-index: 2; height: calc(100% - 5px); }
+        @keyframes slowRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        .stat-box { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+        .label-text { font-size: 10px; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .amount-text { font-size: 22px; font-weight: 800; color: #ffffff !important; text-align: right; }
+        
+        .status-badge { background: rgba(34, 197, 94, 0.1); color: #22c55e; padding: 4px 10px; border-radius: 8px; font-size: 9px; font-weight: 800; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .progress-container { background: rgba(255,255,255,0.05); height: 6px; border-radius: 10px; overflow: hidden; margin-top: 10px; }
+        .progress-bar { background: linear-gradient(90deg, #FFD700, #B8860B); height: 100%; box-shadow: 0 0 10px rgba(184, 134, 11, 0.5); }
+        .bnb-icon { width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 4px; }
     </style>
 </head>
-<body class="bg-[#050505] text-white">
+<body class="p-4 md:p-10">
 
     <div id="nav-placeholder"></div>
 
-    <main class="max-w-7xl mx-auto px-6 relative z-10 pt-10">
-        <div class="flex justify-between items-center mb-10">
+    <main class="max-w-7xl mx-auto space-y-8 pt-10">
+        <div class="flex justify-between items-center">
             <div>
-                <h1 class="text-3xl font-black orbitron italic uppercase tracking-tighter">Active <span class="text-yellow-500">Deposits</span></h1>
-                <p class="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em]">Your running mining packages performance</p>
+                <h1 class="text-2xl font-black orbitron italic uppercase tracking-tighter">Active <span class="text-yellow-500">Deposits</span></h1>
+                <p class="text-gray-500 text-[10px] font-bold uppercase tracking-[0.2em]">Mining Node Performance</p>
             </div>
-            <button onclick="loadActiveDeposits()" class="bg-white/5 border border-white/10 p-2 rounded-lg hover:bg-white/10 transition-all">
+            <button onclick="loadActiveDeposits()" class="bg-white/5 border border-white/10 p-3 rounded-xl hover:bg-white/10 transition-all">
                 <i data-lucide="refresh-cw" class="w-5 h-5 text-yellow-500"></i>
             </button>
         </div>
 
-        <div class="grid grid-cols-2 gap-6 mb-10">
-            <div class="premium-border p-6 text-center">
-                <p class="text-[10px] font-black text-gray-400 uppercase mb-1">Total Active Capital</p>
-                <h3 class="text-2xl font-black orbitron text-white flex items-center justify-center">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="premium-card"><div class="inner-content stat-box">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 bg-white/5 rounded-xl border border-white/10"><i data-lucide="database" class="text-yellow-500 w-6 h-6"></i></div>
+                    <p class="label-text">Total Active Capital</p>
+                </div>
+                <h3 class="amount-text orbitron flex items-center">
                     <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon">
                     <span id="total-active-capital">0.0000</span>
                 </h3>
-            </div>
-            <div class="premium-border p-6 text-center">
-                <p class="text-[10px] font-black text-yellow-500 uppercase mb-1">Estimated Daily Profit</p>
-                <h3 class="text-2xl font-black orbitron text-green-400 flex items-center justify-center">
+            </div></div>
+
+            <div class="premium-card"><div class="inner-content stat-box">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 bg-white/5 rounded-xl border border-white/10"><i data-lucide="trending-up" class="text-green-500 w-6 h-6"></i></div>
+                    <p class="label-text">Daily Profit (0.7%)</p>
+                </div>
+                <h3 class="amount-text orbitron text-green-400 flex items-center">
                     <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon">
                     <span id="total-daily-profit">0.0000</span>
                 </h3>
-            </div>
+            </div></div>
         </div>
 
-        <div id="deposits-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-20">
+        <div id="deposits-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
             <div class="col-span-full text-center py-20">
-                <div class="inline-block animate-spin text-yellow-500 mb-4">
-                    <i data-lucide="refresh-cw" class="w-10 h-10"></i>
-                </div>
-                <p class="orbitron text-xs text-gray-500 uppercase tracking-widest">Scanning Your Nodes...</p>
+                <div class="inline-block animate-spin text-yellow-500 mb-4"><i data-lucide="refresh-cw" class="w-10 h-10"></i></div>
+                <p class="orbitron text-xs text-gray-500 uppercase tracking-widest">Scanning Nodes...</p>
             </div>
         </div>
     </main>
@@ -67,116 +81,91 @@
     <script src="components.js"></script>
     <script src="web3-handler.js"></script>
     <script>
-    // 1. Updated ROI Calculation (Matching contract BNB values)
-    function getGlobalROI(totalAmount) {
-        const amt = parseFloat(totalAmount);
-        if (amt >= 5.665) return 6.00;
-        if (amt >= 2.832) return 5.75;
-        if (amt >= 1.133) return 5.50;
-        if (amt >= 0.566) return 5.25;
-        return 5.00;
-    }
+        const DAILY_ROI = 0.7; // Fixed 0.7% as per requirement
+        const DURATION_DAYS = 21;
 
-    async function loadActiveDeposits() {
-        const grid = document.getElementById('deposits-grid');
-        
-        if (typeof window.contract === 'undefined') {
-            setTimeout(loadActiveDeposits, 1000);
-            return;
-        }
+        async function loadActiveDeposits() {
+            const grid = document.getElementById('deposits-grid');
+            if (typeof window.contract === 'undefined') { setTimeout(loadActiveDeposits, 1000); return; }
 
-        try {
-            const address = await window.signer.getAddress();
-            const userData = await window.contract.users(address);
-            
-            const totalActive = parseFloat(ethers.utils.formatUnits(userData.totalActiveDeposit, 18));
-            document.getElementById('total-active-capital').innerText = totalActive.toFixed(4);
+            try {
+                const address = await window.signer.getAddress();
+                const userData = await window.contract.users(address);
+                const totalActive = parseFloat(ethers.utils.formatUnits(userData.totalActiveDeposit, 18));
+                
+                document.getElementById('total-active-capital').innerText = totalActive.toFixed(4);
+                document.getElementById('total-daily-profit').innerText = (totalActive * (DAILY_ROI / 100)).toFixed(4);
 
-            if (totalActive <= 0) {
-                document.getElementById('total-daily-profit').innerText = `0.0000`;
-                grid.innerHTML = `<div class="col-span-full text-center py-20 text-gray-500 orbitron text-xs border border-dashed border-white/10 rounded-3xl">NO ACTIVE DEPOSITS FOUND</div>`;
-                return;
+                if (totalActive <= 0) {
+                    grid.innerHTML = `<div class="col-span-full text-center py-20 text-gray-600 orbitron text-[10px] border border-dashed border-white/10 rounded-3xl uppercase">No Active Mining Nodes Found</div>`;
+                    return;
+                }
+
+                let html = '';
+                for (let i = 0; i < 50; i++) {
+                    try {
+                        const pos = await window.contract.getPosition(address, i);
+                        const amount = parseFloat(ethers.utils.formatUnits(pos.amount, 18));
+                        if (amount === 0) break;
+
+                        if (pos.active) {
+                            const startTime = parseInt(pos.startTime);
+                            const currentTime = Math.floor(Date.now() / 1000);
+                            const durationSeconds = DURATION_DAYS * 24 * 60 * 60;
+                            const elapsed = currentTime - startTime;
+                            
+                            let progress = ((elapsed / durationSeconds) * 100).toFixed(2);
+                            if (progress > 100) progress = 100;
+                            if (progress < 0) progress = 0;
+
+                            html += `
+                            <div class="premium-card">
+                                <div class="inner-content !block">
+                                    <div class="flex justify-between items-start mb-6">
+                                        <div>
+                                            <p class="label-text mb-1">Node Value</p>
+                                            <h3 class="text-xl font-black orbitron text-white flex items-center">
+                                                <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon">
+                                                ${amount.toFixed(4)}
+                                            </h3>
+                                        </div>
+                                        <span class="status-badge animate-pulse">RUNNING</span>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-3 mb-6">
+                                        <div class="bg-black/40 p-3 rounded-xl border border-white/5">
+                                            <p class="text-[8px] text-gray-500 font-bold uppercase mb-1">Daily Yield</p>
+                                            <p class="text-xs font-bold text-green-400">${(amount * (DAILY_ROI/100)).toFixed(5)} BNB</p>
+                                        </div>
+                                        <div class="bg-black/40 p-3 rounded-xl border border-white/5">
+                                            <p class="text-[8px] text-gray-500 font-bold uppercase mb-1">Source</p>
+                                            <p class="text-xs font-bold text-yellow-500">${pos.source == 1 ? 'REINVEST' : 'DIRECT'}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between text-[10px] font-black orbitron">
+                                            <span class="text-gray-500">CYCLE PROGRESS</span>
+                                            <span class="text-yellow-500">${progress}%</span>
+                                        </div>
+                                        <div class="progress-container">
+                                            <div class="progress-bar" style="width: ${progress}%"></div>
+                                        </div>
+                                        <p class="text-[9px] text-gray-600 text-center italic">Cycle: ${DURATION_DAYS} Days @ ${DAILY_ROI}% Daily</p>
+                                    </div>
+                                </div>
+                            </div>`;
+                        }
+                    } catch (e) { break; }
+                }
+                grid.innerHTML = html || `<div class="col-span-full text-center py-20 text-gray-600">No active positions</div>`;
+                lucide.createIcons();
+            } catch (err) {
+                console.error(err);
+                grid.innerHTML = `<div class="col-span-full text-center py-20 text-red-500 orbitron">Node Connection Error</div>`;
             }
-
-            const globalROIRate = getGlobalROI(totalActive);
-            const totalDailyProfit = (totalActive * (globalROIRate / 100));
-            document.getElementById('total-daily-profit').innerText = totalDailyProfit.toFixed(4);
-
-            let html = '';
-            let foundAny = false;
-
-            for (let i = 0; i < 50; i++) {
-                try {
-                    const pos = await window.contract.getPosition(address, i);
-                    const amount = parseFloat(ethers.utils.formatUnits(pos.amount, 18));
-                    
-                    if (amount === 0) break;
-
-                    if (pos.active) {
-                        foundAny = true;
-                        const cardDailyYield = (amount * (globalROIRate / 100));
-                        const startTime = parseInt(pos.startTime);
-                        const endTime = parseInt(pos.endTime);
-                        const currentTime = Math.floor(Date.now() / 1000);
-                        
-                        const totalDuration = endTime - startTime;
-                        const elapsed = currentTime - startTime;
-                        
-                        let progress = ((elapsed / totalDuration) * 100).toFixed(2);
-                        if (progress > 100) progress = 100;
-                        if (progress < 0) progress = 0;
-
-                        html += `
-                        <div class="premium-border p-8 hover:translate-y-[-5px] transition-all duration-300">
-                            <div class="flex justify-between items-start mb-6">
-                                <div>
-                                    <h3 class="text-xl font-black orbitron italic text-white flex items-center">
-                                        <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon-sm">
-                                        ${amount.toFixed(4)} Node
-                                    </h3>
-                                    <p class="text-[9px] text-yellow-500 font-bold uppercase tracking-widest mt-1 italic">Account Tier: ${globalROIRate.toFixed(2)}% Daily</p>
-                                </div>
-                                <span class="status-badge">Active</span>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-4 mb-8">
-                                <div class="bg-white/5 rounded-2xl p-4 border border-white/10 text-center">
-                                    <p class="text-[9px] font-black text-gray-500 uppercase mb-1">Source</p>
-                                    <p class="text-xs font-black orbitron text-yellow-500">${pos.source == 1 ? 'COMPOUND' : 'DIRECT'}</p>
-                                </div>
-                                <div class="bg-white/5 rounded-2xl p-4 border border-white/10 text-center">
-                                    <p class="text-[9px] font-black text-gray-500 uppercase mb-1">Yield at ${globalROIRate.toFixed(2)}%</p>
-                                    <p class="text-lg font-black orbitron text-green-400 flex items-center justify-center">
-                                        <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.svg?v=024" class="bnb-icon-sm">
-                                        ${cardDailyYield.toFixed(4)}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="space-y-4">
-                                <div class="flex justify-between text-[11px] font-black orbitron uppercase">
-                                    <span class="text-gray-400 italic">Progress</span>
-                                    <span class="text-white">${progress}%</span>
-                                </div>
-                                <div class="progress-container">
-                                    <div class="progress-bar" style="width: ${progress}%"></div>
-                                </div>
-                            </div>
-                        </div>`;
-                    }
-                } catch (e) { break; }
-            }
-
-            grid.innerHTML = foundAny ? html : `<div class="col-span-full text-center py-20 text-gray-500">NO ACTIVE POSITIONS</div>`;
-            if (window.lucide) lucide.createIcons();
-
-        } catch (err) {
-            console.error(err);
-            grid.innerHTML = `<div class="col-span-full text-center py-20 text-red-500">CONTRACT SYNC ERROR</div>`;
         }
-    }
-
-    window.addEventListener('load', () => setTimeout(loadActiveDeposits, 1500));
-</script>
+        window.addEventListener('load', () => setTimeout(loadActiveDeposits, 1200));
+    </script>
 </body>
 </html>
