@@ -11,7 +11,7 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050505; color: white; overflow-x: hidden; }
         .orbitron { font-family: 'Orbitron', sans-serif; }
 
-        /* Moving Neon Border Animation */
+        /* --- NEON ROTATING BORDER ANIMATION --- */
         @keyframes slowRotate {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -19,13 +19,14 @@
 
         .history-card {
             position: relative;
-            background: rgba(255, 255, 255, 0.02);
+            background: #0a0a0a;
             border-radius: 24px;
             padding: 1.5px; /* Border gap */
             overflow: hidden;
             transition: all 0.5s ease;
         }
 
+        /* Moving Neon Effect */
         .history-card::before {
             content: '';
             position: absolute;
@@ -34,7 +35,7 @@
             width: 200%;
             height: 200%;
             background: conic-gradient(transparent, transparent, transparent, #f59e0b);
-            animation: slowRotate 5s linear infinite;
+            animation: slowRotate 4s linear infinite;
             z-index: 0;
         }
 
@@ -68,6 +69,8 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
+        .value-white { color: white !important; }
     </style>
 </head>
 <body class="pt-28 pb-32">
@@ -77,7 +80,7 @@
             <h1 class="text-4xl font-black orbitron italic uppercase tracking-tighter">
                 TX <span class="text-gradient">HISTORY</span>
             </h1>
-            <p class="text-gray-500 text-[10px] font-bold uppercase tracking-[0.3em] mt-2">Verified Blockchain Ledger</p>
+            <p class="text-gray-600 text-[10px] font-bold uppercase tracking-[0.3em] mt-2">Verified Blockchain Ledger</p>
         </div>
 
         <div class="flex flex-wrap justify-center gap-3 mb-12">
@@ -90,7 +93,7 @@
         <div id="history-container" class="grid gap-6">
             <div class="text-center py-20 opacity-50">
                 <div class="w-10 h-10 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                <p class="orbitron text-[10px] tracking-widest uppercase">Connecting Web3...</p>
+                <p class="orbitron text-[10px] tracking-widest uppercase">Fetching Blockchain Data...</p>
             </div>
         </div>
     </main>
@@ -104,44 +107,26 @@
             const container = document.getElementById('history-container');
             const buttons = document.querySelectorAll('.filter-btn');
             
-            // 1. Update Buttons UI
             buttons.forEach(btn => btn.classList.remove('active'));
             const activeBtn = document.getElementById('btn-' + type);
             if(activeBtn) activeBtn.classList.add('active');
 
-            // 2. Show Animated Loading
-            container.innerHTML = `
-                <div class="text-center py-20">
-                    <div class="inline-block animate-spin text-yellow-500 mb-4">
-                        <i data-lucide="loader-2" class="w-8 h-8"></i>
-                    </div>
-                    <p class="text-[10px] font-bold text-gray-500 orbitron tracking-widest uppercase">Fetching ${type} Logs...</p>
-                </div>
-            `;
+            container.innerHTML = `<div class="text-center py-20"><div class="animate-spin inline-block text-yellow-500 mb-4"><i data-lucide="loader-2" class="w-8 h-8"></i></div><p class="orbitron text-[10px] text-gray-500 uppercase tracking-widest">Reading Contract...</p></div>`;
             lucide.createIcons();
 
             try {
-                // 3. ACTUAL WEB3 CALL (Using your web3-handler.js)
-                if (!window.fetchBlockchainHistory) {
-                    throw new Error("Web3 Handler not loaded yet");
-                }
-                
+                // Actual Web3 Call
                 const logs = await window.fetchBlockchainHistory(type);
 
                 if(!logs || logs.length === 0) {
-                    container.innerHTML = `
-                        <div class="text-center py-20 border border-dashed border-white/5 rounded-[40px]">
-                            <p class="text-gray-600 text-[10px] font-bold orbitron uppercase tracking-widest">No ${type} records found</p>
-                        </div>
-                    `;
+                    container.innerHTML = `<div class="text-center py-20 border border-dashed border-white/5 rounded-[40px]"><p class="text-gray-600 text-[10px] font-bold orbitron uppercase tracking-widest">No ${type} records found</p></div>`;
                     return;
                 }
 
-                // 4. Render Logs with NEON Cards
                 let html = '';
                 logs.forEach(item => {
                     const isPositive = (type !== 'withdrawal');
-                    const label = (type === 'compounding') ? 'REINVESTED' : type.toUpperCase();
+                    const displayLabel = (type === 'compounding') ? 'REINVESTED' : type.toUpperCase();
 
                     html += `
                     <div class="history-card">
@@ -151,15 +136,15 @@
                                     <i data-lucide="${getIcon(type)}" class="w-5 h-5 ${isPositive ? 'text-yellow-500' : 'text-red-500'}"></i>
                                 </div>
                                 <div>
-                                    <p class="text-[11px] font-black orbitron text-white tracking-tighter">${label}</p>
+                                    <p class="text-[11px] font-black orbitron text-white tracking-tighter uppercase">${displayLabel}</p>
                                     <p class="text-[9px] font-bold text-gray-500 mt-1 uppercase">${item.date} | ${item.time}</p>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <div class="text-xl font-black orbitron ${isPositive ? 'text-yellow-500' : 'text-red-500'}">
-                                    <span class="text-sm font-bold mr-0.5">$</span>${item.amount}
+                                <div class="text-xl font-black orbitron value-white">
+                                    <span class="text-sm text-yellow-500 font-bold mr-0.5">$</span>${item.amount}
                                 </div>
-                                <p class="text-[8px] text-gray-600 font-bold uppercase tracking-[0.2em] mt-1">Confirmed</p>
+                                <p class="text-[8px] text-gray-600 font-bold uppercase tracking-[0.2em] mt-1">Status: Confirmed</p>
                             </div>
                         </div>
                     </div>`;
@@ -170,7 +155,7 @@
 
             } catch (err) {
                 console.error(err);
-                container.innerHTML = `<div class="text-center py-20 text-red-500 orbitron text-[10px]">SYNC ERROR: CHECK CONNECTION</div>`;
+                container.innerHTML = `<div class="text-center py-20 text-red-500 orbitron text-[10px]">SYNC ERROR: CHECK WALLET</div>`;
             }
         }
 
@@ -179,7 +164,6 @@
             return map[type] || 'circle';
         }
 
-        // Wait for Web3 Initialization
         window.addEventListener('load', () => {
             const checkInit = setInterval(() => {
                 if (window.contract && window.fetchBlockchainHistory) {
