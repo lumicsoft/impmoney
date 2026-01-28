@@ -8,25 +8,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        /* Leadership Page Se Liya Gaya Rang aur Logic */
+        :root { 
+            --soft-gold: #b8860b; 
+            --soft-blue: #2d5a7e; 
+            --soft-purple: #6a4c93; 
+            --panel-bg: #0d0d0d; 
+        }
+
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050505; color: white; overflow-x: hidden; }
         .orbitron { font-family: 'Orbitron', sans-serif; }
 
-        /* --- NEON ROTATING BORDER ANIMATION --- */
         @keyframes slowRotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
+        /* --- Leadership Style Moving Border --- */
         .history-card {
             position: relative;
-            background: #0a0a0a;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 24px;
-            padding: 1.5px; /* Border gap */
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Static border */
             transition: all 0.5s ease;
         }
 
-        /* Moving Neon Effect */
+        /* Yeh wahi multi-color moving logic h jo Leadership me h */
         .history-card::before {
             content: '';
             position: absolute;
@@ -34,22 +42,31 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(transparent, transparent, transparent, #f59e0b);
-            animation: slowRotate 4s linear infinite;
+            background: conic-gradient(
+                from 0deg, 
+                var(--soft-gold), 
+                var(--soft-blue), 
+                var(--soft-purple), 
+                var(--soft-gold)
+            );
+            animation: slowRotate 8s linear infinite;
+            filter: blur(10px); /* Leadership wala soft blur */
             z-index: 0;
         }
 
         .history-inner {
             position: relative;
-            background: #0d0d0d;
-            border-radius: 23px;
+            margin: 2px; /* Border ki motai */
+            background: var(--panel-bg);
+            border-radius: 22px;
             padding: 20px;
-            z-index: 1;
+            z-index: 2;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
+        /* Filter Buttons Style */
         .filter-btn {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -59,9 +76,9 @@
         }
         
         .filter-btn.active {
-            background: #f59e0b;
+            background: var(--soft-gold);
             color: black;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 20px rgba(184, 134, 11, 0.4);
         }
 
         .text-gradient {
@@ -70,7 +87,7 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .value-white { color: white !important; }
+        .value-white { color: white !important; font-weight: 800; }
     </style>
 </head>
 <body class="pt-28 pb-32">
@@ -80,7 +97,7 @@
             <h1 class="text-4xl font-black orbitron italic uppercase tracking-tighter">
                 TX <span class="text-gradient">HISTORY</span>
             </h1>
-            <p class="text-gray-600 text-[10px] font-bold uppercase tracking-[0.3em] mt-2">Verified Blockchain Ledger</p>
+            <p class="text-gray-600 text-[10px] font-bold uppercase tracking-[0.3em] mt-2 italic">Official Contract Ledger</p>
         </div>
 
         <div class="flex flex-wrap justify-center gap-3 mb-12">
@@ -91,9 +108,9 @@
         </div>
 
         <div id="history-container" class="grid gap-6">
-            <div class="text-center py-20 opacity-50">
+            <div class="text-center py-20 opacity-30">
                 <div class="w-10 h-10 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                <p class="orbitron text-[10px] tracking-widest uppercase">Fetching Blockchain Data...</p>
+                <p class="orbitron text-[10px] tracking-widest uppercase">Syncing Ledger...</p>
             </div>
         </div>
     </main>
@@ -108,43 +125,41 @@
             const buttons = document.querySelectorAll('.filter-btn');
             
             buttons.forEach(btn => btn.classList.remove('active'));
-            const activeBtn = document.getElementById('btn-' + type);
-            if(activeBtn) activeBtn.classList.add('active');
+            document.getElementById('btn-' + type).classList.add('active');
 
-            container.innerHTML = `<div class="text-center py-20"><div class="animate-spin inline-block text-yellow-500 mb-4"><i data-lucide="loader-2" class="w-8 h-8"></i></div><p class="orbitron text-[10px] text-gray-500 uppercase tracking-widest">Reading Contract...</p></div>`;
+            container.innerHTML = `<div class="text-center py-20"><p class="orbitron text-[10px] text-gray-600 animate-pulse uppercase tracking-widest">Accessing Blockchain...</p></div>`;
             lucide.createIcons();
 
             try {
-                // Actual Web3 Call
                 const logs = await window.fetchBlockchainHistory(type);
 
                 if(!logs || logs.length === 0) {
-                    container.innerHTML = `<div class="text-center py-20 border border-dashed border-white/5 rounded-[40px]"><p class="text-gray-600 text-[10px] font-bold orbitron uppercase tracking-widest">No ${type} records found</p></div>`;
+                    container.innerHTML = `<div class="text-center py-20 border border-dashed border-white/5 rounded-[40px]"><p class="text-gray-600 text-[10px] font-bold orbitron uppercase tracking-widest">No ${type} data found</p></div>`;
                     return;
                 }
 
                 let html = '';
                 logs.forEach(item => {
                     const isPositive = (type !== 'withdrawal');
-                    const displayLabel = (type === 'compounding') ? 'REINVESTED' : type.toUpperCase();
+                    const label = (type === 'compounding') ? 'REINVESTED' : type.toUpperCase();
 
                     html += `
                     <div class="history-card">
                         <div class="history-inner">
                             <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 shadow-inner">
+                                <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
                                     <i data-lucide="${getIcon(type)}" class="w-5 h-5 ${isPositive ? 'text-yellow-500' : 'text-red-500'}"></i>
                                 </div>
                                 <div>
-                                    <p class="text-[11px] font-black orbitron text-white tracking-tighter uppercase">${displayLabel}</p>
-                                    <p class="text-[9px] font-bold text-gray-500 mt-1 uppercase">${item.date} | ${item.time}</p>
+                                    <p class="text-[11px] font-black orbitron text-white tracking-tighter uppercase">${label}</p>
+                                    <p class="text-[9px] font-bold text-gray-500 mt-1 uppercase">${item.date}</p>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <div class="text-xl font-black orbitron value-white">
-                                    <span class="text-sm text-yellow-500 font-bold mr-0.5">$</span>${item.amount}
+                                <div class="text-xl orbitron value-white">
+                                    <span class="text-sm text-yellow-600 font-bold mr-0.5">$</span>${item.amount}
                                 </div>
-                                <p class="text-[8px] text-gray-600 font-bold uppercase tracking-[0.2em] mt-1">Status: Confirmed</p>
+                                <p class="text-[8px] text-gray-600 font-bold uppercase tracking-[0.2em] mt-1 italic">Verified TX</p>
                             </div>
                         </div>
                     </div>`;
@@ -154,8 +169,7 @@
                 lucide.createIcons();
 
             } catch (err) {
-                console.error(err);
-                container.innerHTML = `<div class="text-center py-20 text-red-500 orbitron text-[10px]">SYNC ERROR: CHECK WALLET</div>`;
+                container.innerHTML = `<div class="text-center py-20 text-red-500 orbitron text-[10px]">WEB3 ERROR: PLEASE REFRESH</div>`;
             }
         }
 
