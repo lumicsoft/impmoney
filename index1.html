@@ -97,21 +97,21 @@
                     <div class="space-y-2">
                         <div class="info-row">
                             <div class="flex items-center gap-3"><i data-lucide="user" class="text-yellow-600 w-4 h-4"></i><span class="label-text">User Name:</span></div>
-                            <span id="username-display" class="text-sm font-bold uppercase">USER_ALPHA</span>
+                            <span id="username-display" class="text-sm font-bold uppercase">loading</span>
                         </div>
                         <div class="info-row">
                             <div class="flex items-center gap-3"><i data-lucide="wallet" class="text-yellow-600 w-4 h-4"></i><span class="label-text">Address:</span></div>
-                            <span id="user-address" class="text-xs font-mono text-blue-300 truncate">0x71...892</span>
+                            <span id="user-address" class="text-xs font-mono text-blue-300 truncate">loading</span>
                         </div>
                         <div class="info-row">
                             <div class="flex items-center gap-3"><i data-lucide="crown" class="text-yellow-600 w-4 h-4"></i><span class="label-text">Current Rank:</span></div>
-                            <span id="rank-display" class="orbitron font-black text-yellow-600 text-xs">PREMIUM</span>
+                            <span id="rank-display" class="orbitron font-black text-yellow-600 text-xs">loading</span>
                         </div>
                     </div>
                     <div class="flex flex-col justify-center bg-black/40 p-5 rounded-2xl border border-white/5">
                         <p class="label-text text-center mb-3">Invitation Link</p>
                         <div class="flex items-center bg-black border border-white/10 rounded-xl p-1.5 pl-4">
-                            <input id="refURL" type="text" readonly value="https://usdt.com/ref/ALPHA" class="bg-transparent border-none outline-none w-full text-xs font-mono text-gray-400">
+                            <input id="refURL" type="text" readonly value="loading" class="bg-transparent border-none outline-none w-full text-xs font-mono text-gray-400">
                             <button onclick="copyLink()" class="btn-gold-pro px-6 py-2 rounded-lg text-[10px]">Copy</button>
                         </div>
                     </div>
@@ -160,7 +160,7 @@
             </div></div>
             <div class="premium-card"><div class="inner-content stat-box">
                 <div class="flex items-center gap-3"><i data-lucide="wallet" class="text-sky-500 w-6 h-6"></i><p class="label-text">Withdraw</p></div>
-                <h3 class="amount-text orbitron">$<span id="withdrawable">0.00</span></h3>
+                <h3 class="amount-text orbitron">$<span id="compounding-balance">0.00</span></h3>
             </div></div>
             <div class="premium-card"><div class="inner-content stat-box">
                 <div class="flex items-center gap-3"><i data-lucide="external-link" class="text-red-600 w-6 h-6"></i><p class="label-text">Paid Out</p></div>
@@ -276,3 +276,4 @@
     </script>
 </body>
 </html>
+
