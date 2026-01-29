@@ -286,8 +286,8 @@ async function fetchAllData(address) {
         const networkIncome = parseFloat(format(extra.rewardsReferral)) + parseFloat(format(extra.rewardsRank));
         const totalWithdrawable = (pendingROI + reserveDaily + networkIncome).toFixed(4);
         
-        updateText('compounding-balance-main', currentProfit); // Sirf trading profit
-        updateText('compounding-balance-main2', currentProfit); // Sirf trading profit
+        updateText('compounding-balance', currentProfit); // Sirf trading profit
+    
         updateText('withdrawable', totalWithdrawable);    // Total (Profit + Referral)
         updateText('cap-balance', format(user.totalActiveDeposit)); // Available Capital
 
@@ -378,6 +378,7 @@ function updateNavbar(addr) {
 }
 
 window.addEventListener('load', init);
+
 
 
 
