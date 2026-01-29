@@ -369,16 +369,25 @@ function start8HourCountdown() {
 // --- UTILS ---
 const format = (val) => {
     try { return parseFloat(ethers.utils.formatUnits(val, 18)).toFixed(4); }
-    catch { return "0.0000"; }
+    catch { return "0.00"; }
 };
-const updateText = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; };
+
+
+const updateText = (id, val) => { 
+    const elements = document.querySelectorAll(`[id="${id}"]`); 
+    if(elements.length > 0) {
+        elements.forEach(el => {
+            el.innerText = val; 
+        });
+    }
+};
+
 function updateNavbar(addr) {
     const btn = document.getElementById('connect-btn');
     if(btn) btn.innerText = addr.substring(0,6) + "..." + addr.substring(38);
 }
 
 window.addEventListener('load', init);
-
 
 
 
