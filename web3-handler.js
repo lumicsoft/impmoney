@@ -368,7 +368,7 @@ function start8HourCountdown() {
 
 // --- UTILS ---
 const format = (val) => {
-    try { return parseFloat(ethers.utils.formatUnits(val, 18)).toFixed(4); }
+    try { return parseFloat(ethers.utils.formatUnits(val, 18)).toFixed(2); }
     catch { return "0.00"; }
 };
 
@@ -388,6 +388,7 @@ function updateNavbar(addr) {
 }
 
 window.addEventListener('load', init);
+
 
 
 
